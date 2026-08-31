@@ -1,0 +1,7 @@
+docs
+.venv
+docker
+environment/.env-local
+*.pyc
+.claude
+CLAUDE.md

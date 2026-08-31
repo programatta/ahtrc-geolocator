@@ -1,0 +1,25 @@
+{
+    "name": "AHTRCDevContainer",
+    "dockerComposeFile":"docker-compose.local.yml",
+    "service": "ahtrc_service",
+    "workspaceFolder": "/code",
+    "customizations": {
+      "vscode": {
+        "settings": {
+          "editor.indentSize": "tabSize",
+          "editor.tabSize": 4,
+          "editor.insertSpaces": true,
+          "editor.detectIndentation": false,
+          "python.defaultInterpreterPath": "/bin/python3"
+        },
+        "extensions": [
+          "vscode-icons-team.vscode-icons",
+          "aaron-bond.better-comments",
+          "usernamehw.errorlens",
+          "ms-python.vscode-pylance",
+          "ms-python.python",
+          "ms-python.pylint"
+        ]
+      }
+    }
+}

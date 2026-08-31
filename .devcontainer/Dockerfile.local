@@ -1,0 +1,35 @@
+FROM debian:trixie-slim
+
+# recibimos el usuairo del sistema.
+ARG user
+
+# añadimos este usuario al contenedor.
+RUN useradd -ms /bin/bash $user
+
+# creamos el directorio de trabajo en el contenedor, que estará mapeado con el host.
+RUN mkdir /code && chown -R ${user}:${user} /code
+
+# añadimos las dependencias.
+RUN apt-get update && apt-get install -y git \
+    python3 python3-venv python3-pip \
+    libpq-dev \
+    gdal-bin geos-bin
+
+# establecemos el usuario (ya el contenedor no trabaja como root)
+USER $user
+
+# copiamos requirements.txt (el resto del código se monta como volumen en tiempo de ejecución).
+COPY --chown=$user:$user requirements.txt /code
+COPY --chown=$user:$user /requirements /code/requirements
+
+# creamos el entorno para evitar warnings.
+RUN python3 -m venv /code/.venv \
+    && . /code/.venv/bin/activate \
+    # instalamos las dependencias.
+    && pip3 install -r /code/requirements.txt
+
+# activamos el venv automáticamente al abrir una terminal interactiva.
+RUN echo '. /code/.venv/bin/activate' >> /home/$user/.bashrc
+
+# establecemos el directorio de trabajo.
+WORKDIR /code

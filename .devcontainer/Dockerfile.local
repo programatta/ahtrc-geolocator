@@ -25,8 +25,8 @@ COPY --chown=$user:$user /requirements /code/requirements
 # creamos el entorno para evitar warnings.
 RUN python3 -m venv /code/.venv \
     && . /code/.venv/bin/activate \
-    # instalamos las dependencias.
-    && pip3 install -r /code/requirements.txt
+    # instalamos las dependencias (incluye stubs de tipos para el editor).
+    && pip3 install -r /code/requirements/development.txt
 
 # activamos el venv automáticamente al abrir una terminal interactiva.
 RUN echo '. /code/.venv/bin/activate' >> /home/$user/.bashrc

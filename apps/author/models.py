@@ -23,9 +23,8 @@ class Author(models.Model):
 
 
 class LiteraryWork(models.Model):
-    title = models.CharField(
-        verbose_name=_('title'),
-        max_length=128
+    title = models.TextField(
+        verbose_name=_('title')
     )
     author = models.ForeignKey(
         'author.Author',
@@ -63,3 +62,38 @@ class LiteraryWork(models.Model):
         verbose_name = _('LiteraryWork')
         verbose_name_plural = _('LiteraryWorks')
         ordering = ['title']
+
+
+class Imagen(models.Model):
+    literary_work = models.ForeignKey(
+        'author.LiteraryWork',
+        verbose_name=_('literary_work'),
+        on_delete=models.CASCADE,
+        related_name='imagen_literarywork'
+    )
+    link = models.CharField(
+        verbose_name=_('link'),
+        max_length=4096
+    )
+
+    class Meta:
+        verbose_name = _('Imagen')
+        verbose_name_plural = _('Imagens')
+
+
+
+class Link(models.Model):
+    literary_work = models.ForeignKey(
+        'author.LiteraryWork',
+        verbose_name=_('literary_work'),
+        on_delete=models.CASCADE,
+        related_name='link_literarywork'
+    )
+    link = models.CharField(
+        verbose_name=_('link'),
+        max_length=4096
+    )
+
+    class Meta:
+        verbose_name = _('Link')
+        verbose_name_plural = _('Links')

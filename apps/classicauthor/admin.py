@@ -6,3 +6,4 @@ from . import models
 class ClassicAuthorAdmin(admin.ModelAdmin):
     list_display = ['name']
     search_fields = ['name']
+    filter_horizontal = ['genres']

@@ -3,5 +3,6 @@ docs
 docker
 environment/.env-local
 *.pyc
+*.mo
 .claude
 CLAUDE.md

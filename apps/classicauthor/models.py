@@ -5,7 +5,7 @@ from apps.genre import models as genremodels
 # Create your models here.
 class ClassicAuthor(models.Model):
     name = models.CharField(verbose_name=_('name'), max_length=256)
-    genres = models.ManyToManyField(genremodels.Genre)
+    genres = models.ManyToManyField(genremodels.Genre, verbose_name=_('genres'))
 
     def __str__(self)->str:
         return f"{self.name}"

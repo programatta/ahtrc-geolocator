@@ -1,8 +1,10 @@
 from django.apps import AppConfig
+from django.utils.translation import gettext_lazy as _
 
 
 class AuthorConfig(AppConfig):
     name = 'apps.author'
+    verbose_name = _('Literary works')
 
     def ready(self):
         # Workaround: django-leaflet 0.34.0 builds PLUGINS[PLUGIN_FORMS]['js'/'css']

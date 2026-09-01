@@ -1,0 +1,139 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-01 13:46+0000\n"
+"PO-Revision-Date: 2026-09-01 13:24+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Spanish\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
+"1 : 2;\n"
+
+#: apps/author/admin.py:19
+msgid "ImageInline"
+msgstr "Imagen"
+
+#: apps/author/admin.py:20
+msgid "ImagesInline"
+msgstr "Imágenes"
+
+#: apps/author/admin.py:26
+msgid "LinkInline"
+msgstr "Enlace"
+
+#: apps/author/admin.py:27
+msgid "LinksInlines"
+msgstr "Enlaces"
+
+#: apps/author/apps.py:7
+msgid "Literary works"
+msgstr "Obras literarias"
+
+#: apps/author/models.py:8
+msgid "first_name"
+msgstr "nombre"
+
+#: apps/author/models.py:12
+msgid "last_name"
+msgstr "apellidos"
+
+#: apps/author/models.py:20
+msgid "Author"
+msgstr "Autor"
+
+#: apps/author/models.py:21
+msgid "Authors"
+msgstr "Autores"
+
+#: apps/author/models.py:27
+msgid "title"
+msgstr "título"
+
+#: apps/author/models.py:31
+msgid "author"
+msgstr "autor"
+
+#: apps/author/models.py:37
+msgid "classic_author"
+msgstr "autor clásico"
+
+#: apps/author/models.py:43
+msgid "genre"
+msgstr "género"
+
+#: apps/author/models.py:48
+msgid "description"
+msgstr "descripción"
+
+#: apps/author/models.py:53
+msgid "location"
+msgstr "ubicación"
+
+#: apps/author/models.py:62
+msgid "LiteraryWork"
+msgstr "Obra literaria"
+
+#: apps/author/models.py:63
+msgid "LiteraryWorks"
+msgstr "Obras literarias"
+
+#: apps/author/models.py:70 apps/author/models.py:88
+msgid "literary_work"
+msgstr "obra literaria"
+
+#: apps/author/models.py:75 apps/author/models.py:93
+msgid "link"
+msgstr "enlace"
+
+#: apps/author/models.py:80
+msgid "Imagen"
+msgstr "Imagen"
+
+#: apps/author/models.py:81
+msgid "Imagens"
+msgstr "Imágenes"
+
+#: apps/author/models.py:98
+msgid "Link"
+msgstr "Enlace"
+
+#: apps/author/models.py:99
+msgid "Links"
+msgstr "Enlaces"
+
+#: apps/classicauthor/apps.py:7
+msgid "Classic authors"
+msgstr "Autores clásicos"
+
+#: apps/classicauthor/models.py:7 apps/genre/models.py:6
+msgid "name"
+msgstr "nombre"
+
+#: apps/classicauthor/models.py:8
+msgid "genres"
+msgstr "Géneros"
+
+#: apps/classicauthor/models.py:14
+msgid "ClassicAuthor"
+msgstr "Autor clásico"
+
+#: apps/classicauthor/models.py:15
+msgid "ClassicAuthors"
+msgstr "Autores clásicos"
+
+#: apps/genre/apps.py:7 apps/genre/models.py:13
+msgid "Genres"
+msgstr "Géneros"
+
+#: apps/genre/models.py:12
+msgid "Genre"
+msgstr "Género"

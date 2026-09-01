@@ -1,0 +1,30 @@
+services:
+  ahtrc_service:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.prod
+    container_name: ahtrcservice_container
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres_service
+    env_file: 
+      - ./environment/.env
+
+  postgres_service:
+    image: postgis/postgis:18-3.6-alpine
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./environment/.env
+    volumes:
+      - ./docker/db:/var/lib/postgresql
+      - ./docker/logs/postgres:/var/log/postgresql
+
+  http_service:
+    image: nginx:1.30.4-trixie
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/logs/http:/var/log/http

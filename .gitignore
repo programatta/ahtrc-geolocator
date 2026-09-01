@@ -2,6 +2,7 @@ docs
 .venv
 docker
 environment/.env-local
+environment/.env
 *.pyc
 *.mo
 .claude

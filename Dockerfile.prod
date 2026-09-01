@@ -1,0 +1,35 @@
+FROM debian:trixie-slim
+
+# creamos el directorio de trabajo en el contenedor, que estará mapeado con el host.
+RUN mkdir /code
+
+# añadimos las dependencias.
+RUN apt-get update && apt-get install -y \
+    python3 python3-venv python3-pip \
+    libpq-dev \
+    gdal-bin geos-bin \
+    gettext
+
+# copiamos requirements.txt.
+COPY requirements.txt /code
+COPY /requirements /code/requirements
+
+# creamos el entorno para evitar warnings.
+RUN python3 -m venv /code/.venv \
+    && . /code/.venv/bin/activate \
+    # instalamos las dependencias (incluye stubs de tipos para el editor).
+    && pip3 install -r /code/requirements/production.txt
+
+# activamos el venv automáticamente al abrir una terminal interactiva.
+RUN echo '. /code/.venv/bin/activate' >> /root/.bashrc
+
+# copiamos el resto del código de la aplicación (la imagen debe ser autocontenida).
+COPY . /code
+
+# establecemos el directorio de trabajo.
+WORKDIR /code
+
+CMD python manage.py migrate --noinput \
+    && python manage.py create_super_user \
+    && python manage.py compilemessages \
+    && gunicorn --bind :8000 conf.wsgi:application

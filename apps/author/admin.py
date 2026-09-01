@@ -29,7 +29,8 @@ class LinkInline(admin.TabularInline):
 @admin.register(models.LiteraryWork)
 class LiteraryAdmin(LeafletGeoAdmin):
     list_display = ['title', 'author', 'genre']
-    search_fields = ['title']
+    search_fields = ['title', 'author__first_name', 'author__last_name']
+    list_filter=['genre']
     autocomplete_fields = ['author', 'classic_author', 'genre']
     display_raw_point = True # Muestra las coordenadas debajo del mapa por si acaso
     settings_overrides = {

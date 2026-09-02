@@ -28,6 +28,11 @@ DEBUG = os.getenv('DEBUG')
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
 
+# Sin esto, Django usa 'same-origin' por defecto y el navegador no envía
+# Referer a orígenes externos (p.ej. tile.openstreetmap.org), que lo exige
+# por política de uso y devuelve 403.
+SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
+
 DJANGO_SITE_HEADER_NAME = os.getenv('SITE_HEADER_NAME')
 DJANGO_SITE_INDEX_TITLE = os.getenv('SITE_INDEX_TITLE')
 
@@ -47,7 +52,9 @@ INSTALLED_APPS = [
     #apps
     'apps.classicauthor',
     'apps.genre',
-    'apps.author'
+    'apps.author',
+    #front
+    'apps.front'
 ]
 
 MIDDLEWARE = [
@@ -65,7 +72,7 @@ ROOT_URLCONF = 'conf.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

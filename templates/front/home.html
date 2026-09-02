@@ -1,0 +1,115 @@
+{% load l10n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AHTRC - Geolocalizador</title>
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""
+    />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""
+    ></script>
+    <script 
+        src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster-src.js"
+    ></script>
+    <style>
+        .select-classic-authors {
+            padding: 12px;
+            border: solid 2px #999;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        #map {
+            height: 80vh; 
+            width: 100%; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>AHTRC Geolocalizador</h1>
+    <select id="classic-author-select" class="select-classic-authors">
+        <option value="" selected disabled>--Seleccione un author clasico--</option>
+        <optgroup>
+            {% for classicAuthor in classicAuthors %}
+            <option value="{{ classicAuthor.id }}">
+                {{ classicAuthor.name }}
+            </option>
+            {% endfor %}
+        </optgroup>
+    </select>
+    <!-- Contenedor del Mapa -->
+    <div id="map"></div>
+
+    <script>
+        // Inicializar el mapa
+        const map = L.map('map',{
+            maxZoom:7, //6
+            minZoom:3,
+            maxBounds: L.latLngBounds([-90, -180], [90, 180]),
+            maxBoundsViscosity: 1.0,
+        }).setView([40.41, -3.70], 4);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap',
+            noWrap: true,
+        }).addTo(map);
+
+        //let markersLayer = L.layerGroup().addTo(map);
+        let markersCluster = L.markerClusterGroup({
+            //chunkedLoading: true,
+            showCoverageOnHover: false, // Opcional: no muestra el área que abarca el cluster
+            zoomToBoundsOnClick: true,  // Al hacer click, hace zoom hasta que se separan
+            spiderfyOnMaxZoom: true,     // Si están en la misma coordenada exacta, los separa en abanico
+            //disableClusteringAtZoom: 9 //7
+        });
+        
+        map.addLayer(markersCluster);
+
+        const literaryWorksData = [
+            {% for literaryWork in literaryWorks %}
+            {% if literaryWork.location %}
+            {
+                lat: {{ literaryWork.location.y|unlocalize }},
+                lng: {{ literaryWork.location.x|unlocalize }},
+                title: "{{ literaryWork.title|escapejs }}",
+                classicAuthorId: {{ literaryWork.classic_author_id }},
+            },
+            {% endif %}
+            {% endfor %}
+        ];
+
+        function renderMarkers(works) {
+            markersCluster.clearLayers();
+            works.forEach(function (work) {
+                markersCluster.addLayer(L.marker([work.lat, work.lng]).bindPopup(work.title));
+            });
+            if (markersCluster.getLayers().length > 0) {
+                map.fitBounds(markersCluster.getBounds());
+            }
+        }
+
+        renderMarkers(literaryWorksData);
+
+        document.getElementById('classic-author-select').addEventListener('change', function () {
+            if (!this.value) {
+                renderMarkers(literaryWorksData);
+                return;
+            }
+            renderMarkers(literaryWorksData.filter(function (work) {
+                return String(work.classicAuthorId) === this.value;
+            }, this));
+        });
+    </script>
+</body>
+</html>

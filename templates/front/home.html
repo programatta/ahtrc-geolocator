@@ -29,11 +29,79 @@
             margin-bottom: 2rem;
         }
 
+        .map-wrapper {
+            position: relative;
+            height: 80vh;
+            width: 100%;
+        }
+
         #map {
-            height: 80vh; 
-            width: 100%; 
-            border-radius: 8px; 
+            height: 100%;
+            width: 100%;
+            border-radius: 8px 0 0 8px;
             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        .work-drawer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 20%;
+            box-sizing: border-box;
+            padding: 1.5rem;
+            overflow-y: auto;
+            background: #fff;
+            box-shadow: 4px 0 12px rgb(0 0 0 / 0.2);
+            border-radius: 8px 0 0 8px;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .work-drawer.open {
+            transform: translateX(0);
+        }
+
+        .work-drawer__close-icon {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            width: 2rem;
+            height: 2rem;
+            border: none;
+            border-radius: 50%;
+            background: #eee;
+            font-size: 1.1rem;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .work-drawer__meta {
+            margin: 0 0 1rem;
+        }
+
+        .work-drawer__meta dt {
+            font-weight: bold;
+            margin-top: 0.5rem;
+        }
+
+        .work-drawer__meta dd {
+            margin: 0;
+        }
+
+        .work-drawer__links {
+            padding-left: 1.2rem;
+        }
+
+        .work-drawer__close-button {
+            margin-top: 1.5rem;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            background: #333;
+            color: #fff;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -50,7 +118,25 @@
         </optgroup>
     </select>
     <!-- Contenedor del Mapa -->
-    <div id="map"></div>
+    <div class="map-wrapper">
+        <div id="map"></div>
+        <aside id="work-drawer" class="work-drawer">
+            <button type="button" id="work-drawer-close-icon" class="work-drawer__close-icon" aria-label="Cerrar">&times;</button>
+            <h2 id="work-drawer-title"></h2>
+            <dl class="work-drawer__meta">
+                <dt>Autor</dt>
+                <dd id="work-drawer-author"></dd>
+                <dt>Autor clásico</dt>
+                <dd id="work-drawer-classic-author"></dd>
+                <dt>Género</dt>
+                <dd id="work-drawer-genre"></dd>
+            </dl>
+            <p id="work-drawer-description"></p>
+            <h3>Enlaces</h3>
+            <ul id="work-drawer-links" class="work-drawer__links"></ul>
+            <button type="button" id="work-drawer-close-button" class="work-drawer__close-button">Cerrar</button>
+        </aside>
+    </div>
 
     <script>
         // Inicializar el mapa
@@ -84,6 +170,11 @@
                 lng: {{ literaryWork.location.x|unlocalize }},
                 title: "{{ literaryWork.title|escapejs }}",
                 classicAuthorId: {{ literaryWork.classic_author_id }},
+                authorName: "{{ literaryWork.author|escapejs }}",
+                classicAuthorName: "{{ literaryWork.classic_author|escapejs }}",
+                genreName: "{{ literaryWork.genre|escapejs }}",
+                description: "{{ literaryWork.description|default_if_none:""|escapejs }}",
+                links: [{% for link in literaryWork.link_literarywork.all %}"{{ link.link|escapejs }}",{% endfor %}],
             },
             {% endif %}
             {% endfor %}
@@ -92,12 +183,48 @@
         function renderMarkers(works) {
             markersCluster.clearLayers();
             works.forEach(function (work) {
-                markersCluster.addLayer(L.marker([work.lat, work.lng]).bindPopup(work.title));
+                const marker = L.marker([work.lat, work.lng]);
+                marker.on('click', function () {
+                    openDrawer(work);
+                });
+                markersCluster.addLayer(marker);
             });
             if (markersCluster.getLayers().length > 0) {
                 map.fitBounds(markersCluster.getBounds());
             }
         }
+
+        const workDrawer = document.getElementById('work-drawer');
+
+        function openDrawer(work) {
+            document.getElementById('work-drawer-title').textContent = work.title;
+            document.getElementById('work-drawer-author').textContent = work.authorName;
+            document.getElementById('work-drawer-classic-author').textContent = work.classicAuthorName;
+            document.getElementById('work-drawer-genre').textContent = work.genreName;
+            document.getElementById('work-drawer-description').textContent = work.description;
+
+            const linksList = document.getElementById('work-drawer-links');
+            linksList.innerHTML = '';
+            work.links.forEach(function (url) {
+                const item = document.createElement('li');
+                const link = document.createElement('a');
+                link.href = url;
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                link.textContent = url;
+                item.appendChild(link);
+                linksList.appendChild(item);
+            });
+
+            workDrawer.classList.add('open');
+        }
+
+        function closeDrawer() {
+            workDrawer.classList.remove('open');
+        }
+
+        document.getElementById('work-drawer-close-icon').addEventListener('click', closeDrawer);
+        document.getElementById('work-drawer-close-button').addEventListener('click', closeDrawer);
 
         renderMarkers(literaryWorksData);
 

@@ -18,4 +18,6 @@ class HomePageView(TemplateView):
         return ClassicAuthor.objects.exclude(name='SIN ASIGNAR')
 
     def _load_literary_works_data(self):
-        return LiteraryWork.objects.all()
+        return LiteraryWork.objects.select_related(
+            'author', 'classic_author', 'genre'
+        ).prefetch_related('link_literarywork').all()

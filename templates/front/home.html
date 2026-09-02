@@ -120,6 +120,7 @@
     <select id="author-select" class="select-classic-authors" disabled>
         <option value="" selected disabled>--Seleccione un autor--</option>
     </select>
+    <button type="button" id="reset-filters-button" class="work-drawer__close-button">Restablecer</button>
     <!-- Contenedor del Mapa -->
     <div class="map-wrapper">
         <div id="map"></div>
@@ -185,6 +186,7 @@
         ];
 
         function renderMarkers(works) {
+            closeDrawer();
             markersCluster.clearLayers();
             works.forEach(function (work) {
                 const marker = L.marker([work.lat, work.lng]);
@@ -289,6 +291,12 @@
             renderMarkers(works.filter(function (work) {
                 return String(work.authorId) === this.value;
             }, this));
+        });
+
+        document.getElementById('reset-filters-button').addEventListener('click', function () {
+            classicAuthorSelect.selectedIndex = 0;
+            resetAuthorSelect();
+            renderMarkers(literaryWorksData);
         });
     </script>
 </body>

@@ -4,3 +4,4 @@ django-leaflet==0.34.0
 python-dotenv==1.2.3
 psycopg2-binary==2.9.12
 django-cors-headers==4.9.0
+Pillow==12.3.0

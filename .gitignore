@@ -7,3 +7,4 @@ environment/.env
 *.mo
 .claude
 CLAUDE.md
+media

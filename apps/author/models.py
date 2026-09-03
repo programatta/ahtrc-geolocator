@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.utils.html import format_html
 from django.contrib.gis.db import models as gis_models
+from .utils import path_and_rename
 
 # Create your models here.
 class Author(models.Model):
@@ -71,15 +73,22 @@ class Imagen(models.Model):
         on_delete=models.CASCADE,
         related_name='imagen_literarywork'
     )
-    link = models.CharField(
-        verbose_name=_('link'),
-        max_length=4096
+    image = models.ImageField(
+        upload_to=path_and_rename,
+        blank=True,
+        null=True,
+        verbose_name=_('Image')
     )
 
     class Meta:
         verbose_name = _('Imagen')
         verbose_name_plural = _('Imagens')
 
+    def image_tag(self):
+        if not self.image:
+            return ''
+        return format_html('<img src="{}" style="width: 50px; height:50px;" />', self.image.url)
+    image_tag.short_description = _('Image')
 
 
 class Link(models.Model):

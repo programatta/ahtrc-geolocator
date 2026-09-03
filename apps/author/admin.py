@@ -14,7 +14,8 @@ class AuthorAdmin(admin.ModelAdmin):
 
 class ImageInline(admin.TabularInline):
     model = models.Imagen
-    fields = []
+    fields = ['image_tag', 'image']
+    readonly_fields = ['image_tag']
     extra = 0
     verbose_name = _('ImageInline')
     verbose_name_plural = _('ImagesInline')

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from apps.classicauthor.models import ClassicAuthor
-from apps.author.models import LiteraryWork
+from apps.author.models import Author, LiteraryWork
 
 
 # Create your views here.
@@ -12,6 +12,7 @@ class HomePageView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['classicAuthors'] = self._load_classic_data()
         context['literaryWorks'] = self._load_literary_works_data()
+        context['totals'] = self._load_totals_data()
         return context
 
     def _load_classic_data(self):
@@ -21,3 +22,10 @@ class HomePageView(TemplateView):
         return LiteraryWork.objects.select_related(
             'author', 'classic_author', 'genre'
         ).prefetch_related('link_literarywork').all()
+
+    def _load_totals_data(self):
+        totals = {}
+        totals['authorCount'] = Author.objects.count()
+        totals['literaryworkCount'] = LiteraryWork.objects.count()
+        totals['classicauthorCount'] = ClassicAuthor.objects.exclude(name='SIN ASIGNAR').count()
+        return totals

@@ -26,7 +26,6 @@
             padding: 12px;
             border: solid 2px #999;
             border-radius: 12px;
-            margin-bottom: 2rem;
         }
 
         .map-wrapper {
@@ -38,7 +37,7 @@
         #map {
             height: 100%;
             width: 100%;
-            border-radius: 8px 0 0 8px;
+            border-radius: 8px;
             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
         }
 
@@ -54,7 +53,8 @@
             background: #fff;
             box-shadow: 4px 0 12px rgb(0 0 0 / 0.2);
             border-radius: 8px 0 0 8px;
-            transform: translateX(-100%);
+            /* -108%, no -100%: a -100% la box-shadow (sin recortar por .map-wrapper) sangraba por el borde del mapa aun cerrado */
+            transform: translateX(-108%);
             transition: transform 0.3s ease;
             z-index: 1000;
         }
@@ -104,30 +104,82 @@
             cursor: pointer;
         }
 
+        .reset-filters-button {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            background: #333;
+            color: #fff;
+            cursor: pointer;
+        }
+
         .marker-icon-selected.leaflet-marker-icon {
             filter: hue-rotate(140deg) saturate(6) brightness(1.05);
+        }
+        .header {
+            font-size: xx-large;
+            margin: 10px 0 6px 6px;
+        }
+        .sub-header {
+            font-size: x-large;
+            margin: 4px 0 6px 6px;
+        }
+        .content-header {
+            margin: 0 0 6px 6px;
+        }
+
+        .bar-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            margin: 1rem 0.5rem 1rem 0.5rem;
+        }
+
+        .total-container {
+            background-color: #999;
+            padding: 12px;
+            border-radius: 12px;
+        }
+        .total-item {
+            background-color: #e3e2e2;
+            padding: 6px;
+            border-radius: 20px;
         }
     </style>
 </head>
 <body>
-    <h1>AHTRC Geolocalizador</h1>
-    <h2>Atlas Hispánico de la Tradición y Recepción Clásica (Siglos XIX-XXI).</h2>
-    <h3>Constitución y estudio de Conjuntos Supranacionales</h3>
-    <h3>Geolocalización e inclusión de datos a cargo de Mónica de Almeida</h3>
-    <select id="classic-author-select" class="select-classic-authors">
-        <option value="" selected disabled>--Seleccione un author clasico--</option>
-        <optgroup>
-            {% for classicAuthor in classicAuthors %}
-            <option value="{{ classicAuthor.id }}">
-                {{ classicAuthor.name }}
-            </option>
-            {% endfor %}
-        </optgroup>
-    </select>
-    <select id="author-select" class="select-classic-authors" disabled>
-        <option value="" selected disabled>--Seleccione un autor--</option>
-    </select>
-    <button type="button" id="reset-filters-button" class="work-drawer__close-button">Restablecer</button>
+    <h1 class="header">AHTRC Geolocalizador</h1>
+    <h2 class="sub-header">Atlas Hispánico de la Tradición y Recepción Clásica (Siglos XIX-XXI).</h2>
+    <h3 class="content-header">Constitución y estudio de Conjuntos Supranacionales</h3>
+    <h3 class="content-header">Geolocalización e inclusión de datos a cargo de Mónica de Almeida</h3>
+
+    <div class="bar-container">
+        <!-- Filtros -->
+         <div>
+            <select id="classic-author-select" class="select-classic-authors">
+                <option value="" selected disabled>--Seleccione un author clasico--</option>
+                <optgroup>
+                    {% for classicAuthor in classicAuthors %}
+                    <option value="{{ classicAuthor.id }}">
+                        {{ classicAuthor.name }}
+                    </option>
+                    {% endfor %}
+                </optgroup>
+            </select>
+            <select id="author-select" class="select-classic-authors" disabled>
+                <option value="" selected disabled>--Seleccione un autor--</option>
+            </select>
+            <button type="button" id="reset-filters-button" class="reset-filters-button">Restablecer</button>
+        </div>
+        <!-- Totales gestionados -->
+        <span class="total-container">
+            <span class="total-item">Obras: {{ totals.literaryworkCount }}</span>
+            <span class="total-item">Autores: {{ totals.authorCount }}</span>
+            <span class="total-item">Clásicos: {{ totals.classicauthorCount }}</span>
+        </span>
+    </div>
+
     <!-- Contenedor del Mapa -->
     <div class="map-wrapper">
         <div id="map"></div>

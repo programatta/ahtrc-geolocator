@@ -197,6 +197,8 @@
             <p id="work-drawer-description"></p>
             <h3>Enlaces</h3>
             <ul id="work-drawer-links" class="work-drawer__links"></ul>
+            <h3>Imágenes</h3>
+            <ul id="work-drawer-images" class="work-drawer__links"></ul>
             <button type="button" id="work-drawer-close-button" class="work-drawer__close-button">Cerrar</button>
         </aside>
     </div>
@@ -261,6 +263,7 @@
                 genreName: "{{ literaryWork.genre|escapejs }}",
                 description: "{{ literaryWork.description|default_if_none:""|escapejs }}",
                 links: [{% for link in literaryWork.link_literarywork.all %}"{{ link.link|escapejs }}",{% endfor %}],
+                images: [{% for image in literaryWork.imagen_literarywork.all %}"{{ image.link|escapejs }}",{% endfor %}],
             },
             {% endif %}
             {% endfor %}
@@ -304,6 +307,19 @@
                 linksList.appendChild(item);
             });
 
+            const imagesList = document.getElementById('work-drawer-images');
+            imagesList.innerHTML = '';
+            console.log('IMAGES:', work.images)
+            work.images.forEach(function (url) {
+                const item = document.createElement('li');
+                const image = document.createElement('img');
+                image.src = url;
+                // image.target = '_blank';
+                // image.rel = 'noopener noreferrer';
+                // image.textContent = url;
+                item.appendChild(image);
+                imagesList.appendChild(item);
+            });
             workDrawer.classList.add('open');
         }
 

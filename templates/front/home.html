@@ -103,10 +103,17 @@
             color: #fff;
             cursor: pointer;
         }
+
+        .marker-icon-selected.leaflet-marker-icon {
+            filter: hue-rotate(140deg) saturate(6) brightness(1.05);
+        }
     </style>
 </head>
 <body>
     <h1>AHTRC Geolocalizador</h1>
+    <h2>Atlas Hispánico de la Tradición y Recepción Clásica (Siglos XIX-XXI).</h2>
+    <h3>Constitución y estudio de Conjuntos Supranacionales</h3>
+    <h3>Geolocalización e inclusión de datos a cargo de Mónica de Almeida</h3>
     <select id="classic-author-select" class="select-classic-authors">
         <option value="" selected disabled>--Seleccione un author clasico--</option>
         <optgroup>
@@ -126,10 +133,10 @@
         <div id="map"></div>
         <aside id="work-drawer" class="work-drawer">
             <button type="button" id="work-drawer-close-icon" class="work-drawer__close-icon" aria-label="Cerrar">&times;</button>
-            <h2 id="work-drawer-title"></h2>
+            <h2 id="work-drawer-author"></h2>
             <dl class="work-drawer__meta">
-                <dt>Autor</dt>
-                <dd id="work-drawer-author"></dd>
+                <dt>Obra</dt>
+                <dd id="work-drawer-title"></dd>
                 <dt>Autor clásico</dt>
                 <dd id="work-drawer-classic-author"></dd>
                 <dt>Género</dt>
@@ -166,6 +173,28 @@
         
         map.addLayer(markersCluster);
 
+        const defaultIcon = new L.Icon.Default();
+        const selectedIcon = new L.Icon.Default({ className: 'marker-icon-selected' });
+        let selectedMarker = null;
+
+        function selectMarker(marker) {
+            if (selectedMarker && selectedMarker !== marker) {
+                selectedMarker.setIcon(defaultIcon);
+                selectedMarker.setZIndexOffset(0);
+            }
+            marker.setIcon(selectedIcon);
+            marker.setZIndexOffset(1000);
+            selectedMarker = marker;
+        }
+
+        function deselectMarker() {
+            if (selectedMarker) {
+                selectedMarker.setIcon(defaultIcon);
+                selectedMarker.setZIndexOffset(0);
+                selectedMarker = null;
+            }
+        }
+
         const literaryWorksData = [
             {% for literaryWork in literaryWorks %}
             {% if literaryWork.location %}
@@ -189,8 +218,9 @@
             closeDrawer();
             markersCluster.clearLayers();
             works.forEach(function (work) {
-                const marker = L.marker([work.lat, work.lng]);
+                const marker = L.marker([work.lat, work.lng], { icon: defaultIcon });
                 marker.on('click', function () {
+                    selectMarker(marker);
                     openDrawer(work);
                 });
                 markersCluster.addLayer(marker);
@@ -227,6 +257,7 @@
 
         function closeDrawer() {
             workDrawer.classList.remove('open');
+            deselectMarker();
         }
 
         document.getElementById('work-drawer-close-icon').addEventListener('click', closeDrawer);

@@ -146,6 +146,73 @@
             padding: 6px;
             border-radius: 20px;
         }
+        .image-carousel {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .image-carousel__viewport {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .image-carousel__track {
+            display: flex;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            transform: translateX(var(--pos, 0%));
+            transition: transform 0.3s ease;
+        }
+
+        .image-carousel__track li {
+            flex: 0 0 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .image-carousel__track img {
+            width: 250px;
+            max-width: 100%;
+        }
+
+        .image-carousel__nav {
+            flex: 0 0 auto;
+            width: 2rem;
+            height: 2rem;
+            border: none;
+            border-radius: 50%;
+            background: #eee;
+            font-size: 1.3rem;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .image-carousel__nav:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+
+        .image-carousel--collapsed .image-carousel__nav {
+            visibility: hidden;
+        }
+
+        @keyframes image-carousel-bounce-left {
+            30% { transform: translateX(calc(var(--pos, 0%) + 8%)); }
+        }
+
+        @keyframes image-carousel-bounce-right {
+            30% { transform: translateX(calc(var(--pos, 0%) - 8%)); }
+        }
+
+        .image-carousel__track.bounce-left {
+            animation: image-carousel-bounce-left 0.3s ease;
+        }
+
+        .image-carousel__track.bounce-right {
+            animation: image-carousel-bounce-right 0.3s ease;
+        }
     </style>
 </head>
 <body>
@@ -198,7 +265,13 @@
             <h3>Enlaces</h3>
             <ul id="work-drawer-links" class="work-drawer__links"></ul>
             <h3>Imágenes</h3>
-            <ul id="work-drawer-images" class="work-drawer__links"></ul>
+            <div id="work-drawer-images-carousel" class="image-carousel">
+                <button type="button" id="work-drawer-images-prev" class="image-carousel__nav" aria-label="Imagen anterior">&lsaquo;</button>
+                <div class="image-carousel__viewport">
+                    <ul id="work-drawer-images" class="image-carousel__track"></ul>
+                </div>
+                <button type="button" id="work-drawer-images-next" class="image-carousel__nav" aria-label="Imagen siguiente">&rsaquo;</button>
+            </div>
             <button type="button" id="work-drawer-close-button" class="work-drawer__close-button">Cerrar</button>
         </aside>
     </div>
@@ -263,7 +336,7 @@
                 genreName: "{{ literaryWork.genre|escapejs }}",
                 description: "{{ literaryWork.description|default_if_none:""|escapejs }}",
                 links: [{% for link in literaryWork.link_literarywork.all %}"{{ link.link|escapejs }}",{% endfor %}],
-                images: [{% for image in literaryWork.imagen_literarywork.all %}"{{ image.link|escapejs }}",{% endfor %}],
+                images: [{% for imagen in literaryWork.imagen_literarywork.all %}{% if imagen.image %}"{{ imagen.image.url|escapejs }}",{% endif %}{% endfor %}],
             },
             {% endif %}
             {% endfor %}
@@ -307,21 +380,67 @@
                 linksList.appendChild(item);
             });
 
-            const imagesList = document.getElementById('work-drawer-images');
-            imagesList.innerHTML = '';
-            console.log('IMAGES:', work.images)
-            work.images.forEach(function (url) {
+            renderCarouselImages(work.images);
+
+            workDrawer.classList.add('open');
+        }
+
+        const imagesCarousel = document.getElementById('work-drawer-images-carousel');
+        const imagesTrack = document.getElementById('work-drawer-images');
+        const imagesPrevButton = document.getElementById('work-drawer-images-prev');
+        const imagesNextButton = document.getElementById('work-drawer-images-next');
+        let carouselImageCount = 0;
+        let carouselIndex = 0;
+
+        function renderCarouselImages(images) {
+            imagesTrack.innerHTML = '';
+            images.forEach(function (url) {
                 const item = document.createElement('li');
                 const image = document.createElement('img');
                 image.src = url;
-                // image.target = '_blank';
-                // image.rel = 'noopener noreferrer';
-                // image.textContent = url;
                 item.appendChild(image);
-                imagesList.appendChild(item);
+                imagesTrack.appendChild(item);
             });
-            workDrawer.classList.add('open');
+            carouselImageCount = images.length;
+            carouselIndex = 0;
+            imagesCarousel.classList.toggle('image-carousel--collapsed', carouselImageCount <= 1);
+            updateCarouselPosition();
         }
+
+        function updateCarouselPosition() {
+            imagesTrack.style.setProperty('--pos', `-${carouselIndex * 100}%`);
+            imagesPrevButton.disabled = carouselIndex === 0;
+            imagesNextButton.disabled = carouselIndex >= carouselImageCount - 1;
+        }
+
+        function bounceCarousel(direction) {
+            const bounceClass = direction === 'prev' ? 'bounce-left' : 'bounce-right';
+            imagesTrack.classList.remove('bounce-left', 'bounce-right');
+            void imagesTrack.offsetWidth; // fuerza el reflow para poder repetir la animación
+            imagesTrack.classList.add(bounceClass);
+        }
+
+        imagesTrack.addEventListener('animationend', function () {
+            imagesTrack.classList.remove('bounce-left', 'bounce-right');
+        });
+
+        imagesPrevButton.addEventListener('click', function () {
+            if (carouselIndex === 0) {
+                bounceCarousel('prev');
+                return;
+            }
+            carouselIndex -= 1;
+            updateCarouselPosition();
+        });
+
+        imagesNextButton.addEventListener('click', function () {
+            if (carouselIndex >= carouselImageCount - 1) {
+                bounceCarousel('next');
+                return;
+            }
+            carouselIndex += 1;
+            updateCarouselPosition();
+        });
 
         function closeDrawer() {
             workDrawer.classList.remove('open');

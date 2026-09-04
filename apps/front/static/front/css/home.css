@@ -1,9 +1,107 @@
+/**
+    home.css
+    Hoja de estilos de la plantilla home.html
+*/
+
+/*
+ ==============================================================================
+ Cabecera de la página
+ ==============================================================================
+*/
+.contenedor-cabecera {
+    display: grid;
+    grid-template-columns: auto 1fr; /* Columna izquierda para el título, derecha para el resto */
+    column-gap: 20px; /* Espacio entre el título y el contenido de la derecha */
+    align-items: center; /* Alinea verticalmente el título al centro (opcional) */
+
+    /* Opcional: Para pintar el borde como en tu dibujo */
+    border: 1px solid #000;
+    padding: 2px 15px 2px 15px;
+    border-radius: 8px;
+}
+
+/* Forzamos a que el H1 ocupe toda la altura de la columna izquierda */
+.contenedor-cabecera h1 {
+    grid-column: 1;
+    grid-row: 1 / span 2; /* Se extiende hacia abajo cubriendo las filas necesarias */
+    margin: 0;
+}
+
+/* El resto de elementos se colocan en la columna 2 automáticamente */
+.contenedor-cabecera p {
+    grid-column: 2;
+    margin: 5px 0; /* Controla el espacio vertical entre ellos */
+}
+
+.contenedor-cabecera .with-h1 {
+    grid-column: 1;
+    grid-row: 2 / span 3; /* Se extiende hacia abajo cubriendo las filas necesarias */
+    margin: 0;
+    align-self: center;
+    justify-self: center;
+}
+
+.subtitulo-cabecera {
+    font-weight: bold;
+}
+
+/* .header {
+    font-size: xx-large;
+    margin: 10px 0 6px 6px;
+}
+.sub-header {
+    font-size: x-large;
+    margin: 4px 0 6px 6px;
+}
+.content-header {
+    margin: 0 0 6px 6px;
+} */
+
+
+/*
+ ==============================================================================
+ Filtros y contadores
+ ==============================================================================
+*/
+.bar-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 1rem 0.5rem 1rem 0.5rem;
+}
+
+.total-container {
+    background-color: #999;
+    padding: 12px;
+    border-radius: 12px;
+}
+.total-item {
+    background-color: #e3e2e2;
+    padding: 6px;
+    border-radius: 20px;
+}
+
 .select-classic-authors {
     padding: 12px;
     border: solid 2px #999;
     border-radius: 12px;
 }
 
+.reset-filters-button {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    background: #333;
+    color: #fff;
+    cursor: pointer;
+}
+
+/*
+ ==============================================================================
+ Mapa
+ ==============================================================================
+*/
 .map-wrapper {
     position: relative;
     height: 80vh;
@@ -17,6 +115,15 @@
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
 }
 
+.marker-icon-selected.leaflet-marker-icon {
+    filter: hue-rotate(140deg) saturate(6) brightness(1.05);
+}
+
+/*
+ ==============================================================================
+ Drawer lateral
+ ==============================================================================
+*/
 .work-drawer {
     position: absolute;
     top: 0;
@@ -80,48 +187,7 @@
     cursor: pointer;
 }
 
-.reset-filters-button {
-    padding: 0.6rem 1.2rem;
-    border: none;
-    border-radius: 8px;
-    background: #333;
-    color: #fff;
-    cursor: pointer;
-}
 
-.marker-icon-selected.leaflet-marker-icon {
-    filter: hue-rotate(140deg) saturate(6) brightness(1.05);
-}
-.header {
-    font-size: xx-large;
-    margin: 10px 0 6px 6px;
-}
-.sub-header {
-    font-size: x-large;
-    margin: 4px 0 6px 6px;
-}
-.content-header {
-    margin: 0 0 6px 6px;
-}
-
-.bar-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    margin: 1rem 0.5rem 1rem 0.5rem;
-}
-
-.total-container {
-    background-color: #999;
-    padding: 12px;
-    border-radius: 12px;
-}
-.total-item {
-    background-color: #e3e2e2;
-    padding: 6px;
-    border-radius: 20px;
-}
 .image-carousel {
     display: flex;
     align-items: center;

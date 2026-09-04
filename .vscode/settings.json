@@ -1,4 +1,5 @@
 {
     "python.analysis.languageServerMode": "light",
-    "pylint.importStrategy": "fromEnvironment"
+    "pylint.importStrategy": "fromEnvironment",
+    "html.validate.scripts": false
 }

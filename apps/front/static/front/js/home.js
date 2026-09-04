@@ -76,6 +76,7 @@ function _corePage(literaryWorksData){
     // -- Funcionalidad del Drawer.
     //-------------------------------------------------------------------------
     const workDrawer = document.getElementById('work-drawer');
+    const workDrawerBackdrop = document.getElementById('work-drawer-backdrop');
 
     function openDrawer(work) {
         document.getElementById('work-drawer-title').textContent = work.title;
@@ -102,6 +103,7 @@ function _corePage(literaryWorksData){
         renderCarouselImages(work.images);
 
         workDrawer.classList.add('open');
+        workDrawerBackdrop.classList.add('open');
     }
 
     const imagesCarousel = document.getElementById('work-drawer-images-carousel');
@@ -163,11 +165,13 @@ function _corePage(literaryWorksData){
 
     function closeDrawer() {
         workDrawer.classList.remove('open');
+        workDrawerBackdrop.classList.remove('open');
         deselectMarker();
     }
 
     document.getElementById('work-drawer-close-icon').addEventListener('click', closeDrawer);
     document.getElementById('work-drawer-close-button').addEventListener('click', closeDrawer);
+    workDrawerBackdrop.addEventListener('click', closeDrawer);
 
     //-------------------------------------------------------------------------
     //--- Funcion que alimenta el mapa.

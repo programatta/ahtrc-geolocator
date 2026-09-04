@@ -84,6 +84,7 @@ function _corePage(literaryWorksData){
         document.getElementById('work-drawer-genre').textContent = work.genreName;
         document.getElementById('work-drawer-description').textContent = work.description;
 
+        document.getElementById('links-section').style.display=(work.links.length>0) ? "block" : "none";
         const linksList = document.getElementById('work-drawer-links');
         linksList.innerHTML = '';
         work.links.forEach(function (url) {
@@ -97,6 +98,7 @@ function _corePage(literaryWorksData){
             linksList.appendChild(item);
         });
 
+        document.getElementById('images-section').style.display= (work.images.length>0) ? "block" : "none";
         renderCarouselImages(work.images);
 
         workDrawer.classList.add('open');

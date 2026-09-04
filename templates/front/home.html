@@ -34,34 +34,36 @@
         <p>Geolocalización e inclusión de datos a cargo de Mónica de Almeida</p>
     </header>
 
-    <div class="bar-container">
-        <!-- Filtros -->
-         <div>
-            <select id="classic-author-select" class="select-classic-authors">
-                <option value="" selected disabled>--Seleccione un author clasico--</option>
-                <optgroup>
-                    {% for classicAuthor in classicAuthors %}
-                    <option value="{{ classicAuthor.id }}">
-                        {{ classicAuthor.name }}
-                    </option>
-                    {% endfor %}
-                </optgroup>
-            </select>
-            <select id="author-select" class="select-classic-authors" disabled>
-                <option value="" selected disabled>--Seleccione un autor--</option>
-            </select>
-            <button type="button" id="reset-filters-button" class="reset-filters-button">Restablecer</button>
-        </div>
-        <!-- Totales gestionados -->
-        <span class="total-container">
-            <span class="total-item">Obras: {{ totals.literaryworkCount }}</span>
-            <span class="total-item">Autores: {{ totals.authorCount }}</span>
-            <span class="total-item">Clásicos: {{ totals.classicauthorCount }}</span>
-        </span>
-    </div>
-
     <!-- Contenedor del Mapa -->
     <div class="map-wrapper">
+        <!-- Los filtros quedan por encima del mapa y con fondo transparente -->
+        <div class="floating-panel">
+            <div class="bar-container">
+                <!-- Filtros -->
+                <div>
+                    <select id="classic-author-select" class="select-classic-authors">
+                        <option value="" selected disabled>--Seleccione un author clasico--</option>
+                        <optgroup>
+                            {% for classicAuthor in classicAuthors %}
+                            <option value="{{ classicAuthor.id }}">
+                                {{ classicAuthor.name }}
+                            </option>
+                            {% endfor %}
+                        </optgroup>
+                    </select>
+                    <select id="author-select" class="select-classic-authors" disabled>
+                        <option value="" selected disabled>--Seleccione un autor--</option>
+                    </select>
+                    <button type="button" id="reset-filters-button" class="reset-filters-button">Restablecer</button>
+                </div>
+                <!-- Totales gestionados -->
+                <span class="total-container">
+                    <span class="total-item">Obras: {{ totals.literaryworkCount }}</span>
+                    <span class="total-item">Autores: {{ totals.authorCount }}</span>
+                    <span class="total-item">Clásicos: {{ totals.classicauthorCount }}</span>
+                </span>
+            </div>
+        </div>
         <div id="map"></div>
         <aside id="work-drawer" class="work-drawer">
             <button type="button" id="work-drawer-close-icon" class="work-drawer__close-icon" aria-label="Cerrar">&times;</button>

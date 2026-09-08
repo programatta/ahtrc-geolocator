@@ -20,8 +20,9 @@ RUN python3 -m venv /code/.venv \
     # instalamos las dependencias (incluye stubs de tipos para el editor).
     && pip3 install -r /code/requirements/production.txt
 
-# activamos el venv automáticamente al abrir una terminal interactiva.
-RUN echo '. /code/.venv/bin/activate' >> /root/.bashrc
+# activamos el venv para cualquier proceso (CMD incluido, que se ejecuta con
+# "sh -c" y no lee /root/.bashrc, así que activarlo solo ahí no bastaría).
+ENV PATH="/code/.venv/bin:$PATH"
 
 # copiamos el resto del código de la aplicación (la imagen debe ser autocontenida).
 COPY . /code

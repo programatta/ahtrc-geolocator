@@ -1,0 +1,11 @@
+docs
+.venv
+docker
+environment/.env-local
+environment/.env
+nginx/active.conf.template
+*.pyc
+*.mo
+.claude
+CLAUDE.md
+media

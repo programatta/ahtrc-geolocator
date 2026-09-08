@@ -1,0 +1,125 @@
+{% load l10n %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AHTRC - Geolocalizador</title>
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""
+    />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""
+    ></script>
+    <script 
+        src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster-src.js"
+    ></script>
+    <link rel="stylesheet" href="{% static 'front/css/home.css' %}" />
+    <script src="{% static 'front/js/home.js' %}"></script>
+</head>
+<body>
+    <header class="contenedor-cabecera">
+        <h1>AHTRC Geolocalizador</h1>
+        <p class="with-h1">Profesor: Dr. Francisco García Jurado</p>
+        <p class="subtitulo-cabecera">Atlas Hispánico de la Tradición y Recepción Clásica (Siglos XIX-XXI).</p>
+        <p>Constitución y estudio de Conjuntos Supranacionales</p>
+        <p>Geolocalización e inclusión de datos a cargo de Mónica de Almeida</p>
+    </header>
+
+    <!-- Contenedor del Mapa -->
+    <div class="map-wrapper">
+        <!-- Los filtros quedan por encima del mapa y con fondo transparente -->
+        <div class="floating-panel">
+            <div class="bar-container">
+                <!-- Filtros -->
+                <div>
+                    <select id="classic-author-select" class="select-classic-authors">
+                        <option value="" selected disabled>--Seleccione un author clasico--</option>
+                        <optgroup>
+                            {% for classicAuthor in classicAuthors %}
+                            <option value="{{ classicAuthor.id }}">
+                                {{ classicAuthor.name }}
+                            </option>
+                            {% endfor %}
+                        </optgroup>
+                    </select>
+                    <select id="author-select" class="select-classic-authors" disabled>
+                        <option value="" selected disabled>--Seleccione un autor--</option>
+                    </select>
+                    <button type="button" id="reset-filters-button" class="reset-filters-button">Restablecer</button>
+                </div>
+                <!-- Totales gestionados -->
+                <span class="total-container">
+                    <span class="total-item">Obras: {{ totals.literaryworkCount }}</span>
+                    <span class="total-item">Autores: {{ totals.authorCount }}</span>
+                    <span class="total-item">Clásicos: {{ totals.classicauthorCount }}</span>
+                </span>
+            </div>
+        </div>
+        <div id="map"></div>
+        <div id="work-drawer-backdrop" class="work-drawer-backdrop"></div>
+        <aside id="work-drawer" class="work-drawer">
+            <button type="button" id="work-drawer-close-icon" class="work-drawer__close-icon" aria-label="Cerrar">&times;</button>
+            <h2 id="work-drawer-author"></h2>
+            <dl class="work-drawer__meta">
+                <dt>Obra</dt>
+                <dd id="work-drawer-title"></dd>
+                <dt>Autor clásico</dt>
+                <dd id="work-drawer-classic-author"></dd>
+                <dt>Género</dt>
+                <dd id="work-drawer-genre"></dd>
+            </dl>
+            <p id="work-drawer-description"></p>
+            <div id="links-section">
+                <h3>Enlaces</h3>
+                <ul id="work-drawer-links" class="work-drawer__links"></ul>
+            </div>
+            <div id="images-section">
+                <h3>Imágenes</h3>
+                <div id="work-drawer-images-carousel" class="image-carousel">
+                    <button type="button" id="work-drawer-images-prev" class="image-carousel__nav" aria-label="Imagen anterior">&lsaquo;</button>
+                    <div class="image-carousel__viewport">
+                        <ul id="work-drawer-images" class="image-carousel__track"></ul>
+                    </div>
+                    <button type="button" id="work-drawer-images-next" class="image-carousel__nav" aria-label="Imagen siguiente">&rsaquo;</button>
+                </div>
+            </div>
+            <button type="button" id="work-drawer-close-button" class="work-drawer__close-button">Cerrar</button>
+        </aside>
+    </div>
+
+    <script>
+        //Alimentamos el mapa.
+        {% for literaryWork in literaryWorks %}
+        {% if literaryWork.location %}
+        MapData.addData({
+            lat: {{ literaryWork.location.y|unlocalize }},
+            lng: {{ literaryWork.location.x|unlocalize }},
+            title: "{{ literaryWork.title|escapejs }}",
+            classicAuthorId: {{ literaryWork.classic_author_id }},
+            authorId: {{ literaryWork.author_id }},
+            authorName: "{{ literaryWork.author|escapejs }}",
+            classicAuthorName: "{{ literaryWork.classic_author|escapejs }}",
+            genreName: "{{ literaryWork.genre|escapejs }}",
+            description: "{{ literaryWork.description|default_if_none:""|escapejs }}",
+            links: [{% for link in literaryWork.link_literarywork.all %}"{{ link.link|escapejs }}",{% endfor %}],
+            images: [{% for imagen in literaryWork.imagen_literarywork.all %}{% if imagen.image %}"{{ imagen.image.url|escapejs }}",{% endif %}{% endfor %}],
+        });
+        {% endif %}
+        {% endfor %}
+
+        //Cargamos los controles.
+        (function(mapData){
+            _corePage(mapData);
+        })(MapData.literaryWorksData);
+    </script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+services:
+  ahtrc_service:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.prod
+    container_name: ahtrcservice_container
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres_service
+    env_file:
+      - ./environment/.env
+    volumes:
+      - static_data:/code/staticfiles
+      - media_data:/code/media
+    restart: always
+
+  postgres_service:
+    image: postgis/postgis:18-3.6-alpine
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./environment/.env
+    volumes:
+      - ./docker/db:/var/lib/postgresql
+      - ./docker/logs/postgres:/var/log/postgresql
+    restart: always
+
+  http_service:
+    image: nginx:1.30.4-trixie
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - ahtrc_service
+    env_file:
+      - ./environment/.env
+    volumes:
+      - static_data:/code/staticfiles:ro
+      - media_data:/code/media:ro
+      - certbot_etc:/etc/letsencrypt:ro
+      - certbot_html:/var/www/certbot:ro
+      - ./nginx/active.conf.template:/etc/nginx/templates/default.conf.template:ro
+      - ./docker/logs/http:/var/log/http
+    restart: always
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - certbot_etc:/etc/letsencrypt
+      - certbot_var:/var/lib/letsencrypt
+      - certbot_html:/var/www/certbot
+    # Comando para validar el certificado y verificar la renovación cada 12 horas
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    restart: always
+
+volumes:
+  static_data:
+  media_data:
+  certbot_etc:
+  certbot_var:
+  certbot_html:

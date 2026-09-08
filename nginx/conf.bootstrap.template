@@ -1,0 +1,28 @@
+server {
+    listen 80;
+    server_name ${DOMAIN} www.${DOMAIN};
+
+    # Ruta necesaria para que Certbot valide la propiedad del dominio y
+    # pueda emitir el primer certificado (todavía no existe ninguno).
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    # Archivos Estáticos y Media de Django
+    location /static/ {
+        alias /code/staticfiles/;
+    }
+
+    location /media/ {
+        alias /code/media/;
+    }
+
+    # Proxy inverso hacia el contenedor de Django (Gunicorn)
+    location / {
+        proxy_pass http://ahtrc_service:8000;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+    }
+}

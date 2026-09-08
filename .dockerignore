@@ -1,0 +1,14 @@
+.git
+.gitignore
+.venv
+docker
+docs
+environment/.env-local
+environment/.env
+.devcontainer
+.vscode
+.claude
+CLAUDE.md
+**/__pycache__
+*.pyc
+*.mo

@@ -1,0 +1,38 @@
+services:
+  ahtrc_service:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile.local
+      args:
+        user: $USER
+    command: sleep infinity
+    container_name: ahtrcservice_container
+    ports:
+      - "8000:8000"
+    volumes:
+      - ..:/code
+      - venv_data:/code/.venv
+    depends_on:
+      - postgres_service
+    # networks:
+    #   - crmhlc-network
+    env_file: 
+      - ../environment/.env-local
+
+  postgres_service:
+    image: postgis/postgis:18-3.6-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ../docker/db:/var/lib/postgresql
+      - ../docker/logs/postgres:/var/log/postgresql
+
+volumes:
+  venv_data:
+
+# #HAY QUE CREAR ESTA RED ANTES DE LEVANTAR EL DEVCONTAINER.
+# networks:
+#   crmhlc-network:
+#     external: true

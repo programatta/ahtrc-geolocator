@@ -1,0 +1,4 @@
+[tool.pylint.MASTER]
+load-plugins = ["pylint_django"]
+django-settings-module = "conf.settings"
+init-hook = "import sys; sys.path.insert(0, '/code')"

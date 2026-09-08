@@ -1,0 +1,287 @@
+/**
+    home.css
+    Hoja de estilos de la plantilla home.html
+*/
+
+/*
+ ==============================================================================
+ Cabecera de la página
+ ==============================================================================
+*/
+.contenedor-cabecera {
+    display: grid;
+    grid-template-columns: auto 1fr; /* Columna izquierda para el título, derecha para el resto */
+    column-gap: 20px; /* Espacio entre el título y el contenido de la derecha */
+    align-items: center; /* Alinea verticalmente el título al centro (opcional) */
+
+    /* Opcional: Para pintar el borde como en tu dibujo */
+    border: 1px solid #000;
+    padding: 2px 15px 2px 15px;
+    border-radius: 8px;
+}
+
+/* Forzamos a que el H1 ocupe toda la altura de la columna izquierda */
+.contenedor-cabecera h1 {
+    grid-column: 1;
+    grid-row: 1 / span 2; /* Se extiende hacia abajo cubriendo las filas necesarias */
+    margin: 0;
+}
+
+/* El resto de elementos se colocan en la columna 2 automáticamente */
+.contenedor-cabecera p {
+    grid-column: 2;
+    margin: 5px 0; /* Controla el espacio vertical entre ellos */
+}
+
+.contenedor-cabecera .with-h1 {
+    grid-column: 1;
+    grid-row: 2 / span 3; /* Se extiende hacia abajo cubriendo las filas necesarias */
+    margin: 0;
+    align-self: center;
+    justify-self: center;
+}
+
+.subtitulo-cabecera {
+    font-weight: bold;
+}
+
+
+/*
+ ==============================================================================
+ Filtros y contadores
+ ==============================================================================
+*/
+.floating-panel {
+    position: absolute;
+    top: 4px;
+    left: 52px;
+    right: 52px; /* junto con left, calcula el ancho automáticamente al ancho de .map-wrapper */
+    z-index: 1000; /* Leaflet usa z-index altos para sus popups, 1000 asegura que la UI quede por encima */
+
+    max-height: calc(100dvh - 40px); /* Evita que sea más alto que la pantalla en portátiles */
+    /* overflow-y: auto; Si el contenido crece, la tarjeta tendrá su propio scroll */
+
+    /* Estética de la tarjeta (Efecto Glassmorphism sutil) */
+    background-color: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(3px);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.bar-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 1rem 0.5rem 1rem 0.5rem;
+}
+
+.total-container {
+    background-color: #999;
+    padding: 12px;
+    border-radius: 12px;
+}
+.total-item {
+    background-color: #e3e2e2;
+    padding: 6px;
+    border-radius: 20px;
+}
+
+.select-classic-authors {
+    padding: 12px;
+    border: solid 2px #999;
+    border-radius: 12px;
+}
+
+.reset-filters-button {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    background: #333;
+    color: #fff;
+    cursor: pointer;
+}
+
+/*
+ ==============================================================================
+ Mapa
+ ==============================================================================
+*/
+.map-wrapper {
+    position: relative;
+    height: calc(100dvh - 116px);
+    width: calc(100dvw - 16px);
+    margin-top: 6px;
+}
+
+#map {
+    height: 100%;
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.marker-icon-selected.leaflet-marker-icon {
+    filter: hue-rotate(140deg) saturate(6) brightness(1.05);
+}
+
+/*
+ ==============================================================================
+ Drawer lateral
+ ==============================================================================
+*/
+.work-drawer-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 1050; /* por debajo del drawer, por encima del mapa y el floating-panel */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.work-drawer-backdrop.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.work-drawer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 390px;
+    box-sizing: border-box;
+    padding: 1.5rem;
+    overflow-y: auto;
+    background: #fff;
+    box-shadow: 4px 0 12px rgb(0 0 0 / 0.2);
+    border-radius: 8px 0 0 8px;
+    /* -108%, no -100%: a -100% la box-shadow (sin recortar por .map-wrapper) sangraba por el borde del mapa aun cerrado */
+    transform: translateX(-108%);
+    transition: transform 0.3s ease;
+    z-index: 1100; /* por encima del backdrop y del floating-panel, para que no quede tapado al abrirse */
+}
+
+.work-drawer.open {
+    transform: translateX(0);
+}
+
+.work-drawer__close-icon {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 2rem;
+    height: 2rem;
+    border: none;
+    border-radius: 50%;
+    background: #eee;
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.work-drawer__meta {
+    margin: 0 0 1rem;
+}
+
+.work-drawer__meta dt {
+    font-weight: bold;
+    margin-top: 0.5rem;
+}
+
+.work-drawer__meta dd {
+    margin: 0;
+}
+
+.work-drawer__links {
+    padding-left: 1.2rem;
+}
+
+.work-drawer__close-button {
+    margin-top: 1.5rem;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    background: #333;
+    color: #fff;
+    cursor: pointer;
+}
+
+
+.image-carousel {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.image-carousel__viewport {
+    flex: 1;
+    overflow: hidden;
+}
+
+.image-carousel__track {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    transform: translateX(var(--pos, 0%));
+    transition: transform 0.3s ease;
+}
+
+.image-carousel__track li {
+    flex: 0 0 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.image-carousel__track img {
+    width: 250px;
+    max-width: 100%;
+}
+
+.image-carousel__nav {
+    flex: 0 0 auto;
+    width: 2rem;
+    height: 2rem;
+    border: none;
+    border-radius: 50%;
+    background: #eee;
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.image-carousel__nav:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.image-carousel--collapsed .image-carousel__nav {
+    visibility: hidden;
+}
+
+@keyframes image-carousel-bounce-left {
+    30% { transform: translateX(calc(var(--pos, 0%) + 8%)); }
+}
+
+@keyframes image-carousel-bounce-right {
+    30% { transform: translateX(calc(var(--pos, 0%) - 8%)); }
+}
+
+.image-carousel__track.bounce-left {
+    animation: image-carousel-bounce-left 0.3s ease;
+}
+
+.image-carousel__track.bounce-right {
+    animation: image-carousel-bounce-right 0.3s ease;
+}

@@ -2,7 +2,7 @@ name: Deploy a producción
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   workflow_dispatch: {}
 
 permissions:
@@ -68,8 +68,8 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     # Protege también el caso "workflow_dispatch" manual: solo despliega si
-    # el ref elegido para ejecutar el workflow es master.
-    if: github.ref == 'refs/heads/master'
+    # el ref elegido para ejecutar el workflow es main.
+    if: github.ref == 'refs/heads/main'
 
     env:
       PROD_SSH_HOST: ${{ secrets.PROD_SSH_HOST }}
@@ -96,8 +96,8 @@ jobs:
           ssh -i ~/.ssh/deploy_key -p "$PROD_SSH_PORT" -o StrictHostKeyChecking=yes "$PROD_SSH_USER@$PROD_SSH_HOST" bash -s <<REMOTE
           set -euo pipefail
           cd "$PROD_APP_PATH"
-          git fetch origin master
-          git reset --hard origin/master
+          git fetch origin main
+          git reset --hard origin/main
           docker compose -f docker-compose.prod.yml build ahtrc_service
           docker compose -f docker-compose.prod.yml up -d --force-recreate ahtrc_service http_service
           docker image prune -f

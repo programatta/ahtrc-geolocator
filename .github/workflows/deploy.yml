@@ -1,0 +1,104 @@
+name: Deploy a producción
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+jobs:
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgis/postgis:18-3.6-alpine
+        env:
+          POSTGRES_DB: ahtrc_ci
+          POSTGRES_USER: ahtrc_ci
+          POSTGRES_PASSWORD: ahtrc_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U ahtrc_ci"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=10
+
+    env:
+      DEBUG: "True"
+      SECRET_KEY: ci-test-secret-key
+      ALLOWED_HOSTS: localhost,127.0.0.1
+      DB_ENGINE: django.contrib.gis.db.backends.postgis
+      DB_NAME: ahtrc_ci
+      DB_USER: ahtrc_ci
+      DB_PASSWORD: ahtrc_ci
+      DB_HOST: localhost
+      DB_PORT: 5432
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Instalar dependencias del sistema (GDAL/GEOS, igual que Dockerfile.prod)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libpq-dev gdal-bin geos-bin gettext
+
+      - name: Instalar dependencias Python
+        run: pip install -r requirements/base.txt
+
+      - name: Ejecutar tests
+        run: python manage.py test
+
+  deploy:
+    name: Desplegar en producción
+    needs: test
+    runs-on: ubuntu-latest
+    # Protege también el caso "workflow_dispatch" manual: solo despliega si
+    # el ref elegido para ejecutar el workflow es master.
+    if: github.ref == 'refs/heads/master'
+
+    env:
+      PROD_SSH_HOST: ${{ secrets.PROD_SSH_HOST }}
+      PROD_SSH_PORT: ${{ secrets.PROD_SSH_PORT || '22' }}
+      PROD_SSH_USER: ${{ secrets.PROD_SSH_USER }}
+      PROD_APP_PATH: ${{ secrets.PROD_APP_PATH }}
+
+    steps:
+      - name: Configurar acceso SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.PROD_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p "$PROD_SSH_PORT" -H "$PROD_SSH_HOST" >> ~/.ssh/known_hosts
+
+      # El "cd $PROD_APP_PATH" y el resto de variables se sustituyen aquí
+      # (en el runner) antes de enviar el script al servidor, por eso el
+      # heredoc va SIN comillas: si llevara comillas ('REMOTE'), $PROD_APP_PATH
+      # se evaluaría en el servidor remoto, donde esa variable no existe.
+      - name: Actualizar código y relanzar contenedores
+        run: |
+          ssh -i ~/.ssh/deploy_key -p "$PROD_SSH_PORT" -o StrictHostKeyChecking=yes "$PROD_SSH_USER@$PROD_SSH_HOST" bash -s <<REMOTE
+          set -euo pipefail
+          cd "$PROD_APP_PATH"
+          git fetch origin master
+          git reset --hard origin/master
+          docker compose -f docker-compose.prod.yml build ahtrc_service
+          docker compose -f docker-compose.prod.yml up -d --force-recreate ahtrc_service http_service
+          docker image prune -f
+          REMOTE

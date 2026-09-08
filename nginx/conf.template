@@ -1,6 +1,6 @@
 server {
     listen 80;
-    server_name ${DOMAIN} www.${DOMAIN};
+    server_name ${DOMAIN};
 
     # Ruta necesaria para que Certbot valide la propiedad del dominio
     location /.well-known/acme-challenge/ {
@@ -15,7 +15,7 @@ server {
 
 server {
     listen 443 ssl;
-    server_name ${DOMAIN} www.${DOMAIN};
+    server_name ${DOMAIN};
 
     # Certificados SSL de Let's Encrypt
     ssl_certificate /etc/letsencrypt/live/${DOMAIN}/fullchain.pem;

@@ -183,4 +183,4 @@ if not DEBUG:
     SECURE_HSTS_PRELOAD = os.getenv('SECURE_HSTS_PRELOAD', 'False').strip().lower() in ('true', '1', 'yes', 'on')
 
     _domain = os.getenv('DOMAIN', '')
-    CSRF_TRUSTED_ORIGINS = [f'https://{_domain}', f'https://www.{_domain}'] if _domain else []
+    CSRF_TRUSTED_ORIGINS = [f'https://{_domain}'] if _domain else []

@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG')
+DEBUG = os.getenv('DEBUG', 'False').strip().lower() in ('true', '1', 'yes', 'on')
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 # Sin esto, Django usa 'same-origin' por defecto y el navegador no envía
 # Referer a orígenes externos (p.ej. tile.openstreetmap.org), que lo exige
@@ -45,17 +45,21 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     #extension-gis.
     'django.contrib.gis',
     #extension-mapa.
     'leaflet',
     #apps
+    'apps.base',
     'apps.classicauthor',
     'apps.genre',
     'apps.author',
     #front
     'apps.front'
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -141,6 +145,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.getenv('STATIC_ROOT', os.path.join(BASE_DIR, 'staticfiles'))
 
 MEDIA_URL = os.getenv('MEDIA_URL', '/media/')
 MEDIA_ROOT = os.getenv('MEDIA_ROOT', os.path.join(BASE_DIR, 'media'))
@@ -153,3 +158,29 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+
+# --- Seguridad HTTPS ---
+# nginx hace de proxy TLS delante de gunicorn en producción. Estos ajustes
+# solo aplican cuando DEBUG=False: en el devcontainer (DEBUG=True, sin TLS
+# delante) forzarlos rompería el entorno de desarrollo.
+if not DEBUG:
+    # Permite desactivar temporalmente la redirección durante el arranque en
+    # frío de certbot (ver runbook de nginx/certbot), cuando nginx todavía
+    # solo sirve HTTP porque no existe certificado. Por defecto activo.
+    SECURE_SSL_REDIRECT = os.getenv('SECURE_SSL_REDIRECT', 'True').strip().lower() in ('true', '1', 'yes', 'on')
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+    # Empezar con un valor bajo (1 día) y subirlo tras validar unos días que
+    # todo funciona correctamente sobre HTTPS; SECURE_HSTS_PRELOAD es casi
+    # irreversible una vez el dominio entra en la lista de precarga de los
+    # navegadores, así que no activarlo hasta confirmar que el despliegue es
+    # estable.
+    SECURE_HSTS_SECONDS = int(os.getenv('SECURE_HSTS_SECONDS', 60 * 60 * 24))
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = os.getenv('SECURE_HSTS_PRELOAD', 'False').strip().lower() in ('true', '1', 'yes', 'on')
+
+    _domain = os.getenv('DOMAIN', '')
+    CSRF_TRUSTED_ORIGINS = [f'https://{_domain}', f'https://www.{_domain}'] if _domain else []

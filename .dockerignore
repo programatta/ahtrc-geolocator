@@ -4,6 +4,7 @@
 docker
 docs
 environment/.env-local
+environment/.env
 .devcontainer
 .vscode
 .claude

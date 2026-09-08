@@ -1,0 +1,45 @@
+server {
+    listen 80;
+    server_name ${DOMAIN} www.${DOMAIN};
+
+    # Ruta necesaria para que Certbot valide la propiedad del dominio
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    # Redirección de HTTP a HTTPS
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl;
+    server_name ${DOMAIN} www.${DOMAIN};
+
+    # Certificados SSL de Let's Encrypt
+    ssl_certificate /etc/letsencrypt/live/${DOMAIN}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${DOMAIN}/privkey.pem;
+
+    # Optimización de seguridad SSL
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers on;
+
+    # Archivos Estáticos y Media de Django
+    location /static/ {
+        alias /code/staticfiles/;
+    }
+
+    location /media/ {
+        alias /code/media/;
+    }
+
+    # Proxy inverso hacia el contenedor de Django (Gunicorn)
+    location / {
+        proxy_pass http://ahtrc_service:8000;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+    }
+}

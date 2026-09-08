@@ -1,6 +1,6 @@
 server {
     listen 80;
-    server_name ${DOMAIN} www.${DOMAIN};
+    server_name ${DOMAIN};
 
     # Ruta necesaria para que Certbot valide la propiedad del dominio y
     # pueda emitir el primer certificado (todavía no existe ninguno).

@@ -15,3 +15,6 @@ CLAUDE.md
 **/__pycache__
 *.pyc
 *.mo
+backups
+backupdb.sh
+backupfiles.sh

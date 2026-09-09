@@ -12,3 +12,4 @@ nginx/active.conf.template
 .claude
 CLAUDE.md
 media
+backups

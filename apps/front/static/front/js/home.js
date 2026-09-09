@@ -11,10 +11,10 @@ function _corePage(literaryWorksData){
     // Inicializar el mapa
     const map = L.map('map',{
         maxZoom:7, //6
-        minZoom:3,
+        minZoom:1,
         maxBounds: L.latLngBounds([-90, -180], [90, 180]),
         maxBoundsViscosity: 1.0,
-    }).setView([40.41, -3.70], 4);
+    })//.setView([40.41, -3.70], 4);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap',
         noWrap: true,
@@ -84,6 +84,7 @@ function _corePage(literaryWorksData){
         document.getElementById('work-drawer-classic-author').textContent = work.classicAuthorName;
         document.getElementById('work-drawer-genre').textContent = work.genreName;
         document.getElementById('work-drawer-description').textContent = work.description;
+        document.getElementById('description-section').style.display = work.description ? "block" : "none";
 
         document.getElementById('links-section').style.display=(work.links.length>0) ? "block" : "none";
         const linksList = document.getElementById('work-drawer-links');

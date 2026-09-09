@@ -69,21 +69,34 @@
         <aside id="work-drawer" class="work-drawer">
             <button type="button" id="work-drawer-close-icon" class="work-drawer__close-icon" aria-label="Cerrar">&times;</button>
             <h2 id="work-drawer-author"></h2>
-            <dl class="work-drawer__meta">
-                <dt>Obra</dt>
-                <dd id="work-drawer-title"></dd>
-                <dt>Autor clásico</dt>
-                <dd id="work-drawer-classic-author"></dd>
-                <dt>Género</dt>
-                <dd id="work-drawer-genre"></dd>
-            </dl>
-            <p id="work-drawer-description"></p>
-            <div id="links-section">
-                <h3>Enlaces</h3>
+
+            <fieldset class="work-drawer__field">
+                <legend>Obra</legend>
+                <p id="work-drawer-title"></p>
+            </fieldset>
+
+            <fieldset class="work-drawer__field">
+                <legend>Autor clásico</legend>
+                <p id="work-drawer-classic-author"></p>
+            </fieldset>
+
+            <fieldset class="work-drawer__field">
+                <legend>Género</legend>
+                <p id="work-drawer-genre"></p>
+            </fieldset>
+
+            <fieldset id="description-section" class="work-drawer__field">
+                <legend>Descripción</legend>
+                <p id="work-drawer-description"></p>
+            </fieldset>
+
+            <fieldset id="links-section" class="work-drawer__field">
+                <legend>Enlaces</legend>
                 <ul id="work-drawer-links" class="work-drawer__links"></ul>
-            </div>
-            <div id="images-section">
-                <h3>Imágenes</h3>
+            </fieldset>
+
+            <fieldset id="images-section" class="work-drawer__field">
+                <legend>Imágenes</legend>
                 <div id="work-drawer-images-carousel" class="image-carousel">
                     <button type="button" id="work-drawer-images-prev" class="image-carousel__nav" aria-label="Imagen anterior">&lsaquo;</button>
                     <div class="image-carousel__viewport">
@@ -91,7 +104,7 @@
                     </div>
                     <button type="button" id="work-drawer-images-next" class="image-carousel__nav" aria-label="Imagen siguiente">&rsaquo;</button>
                 </div>
-            </div>
+            </fieldset>
             <button type="button" id="work-drawer-close-button" class="work-drawer__close-button">Cerrar</button>
         </aside>
     </div>

@@ -84,6 +84,7 @@ function _corePage(literaryWorksData){
         document.getElementById('work-drawer-classic-author').textContent = work.classicAuthorName;
         document.getElementById('work-drawer-genre').textContent = work.genreName;
         document.getElementById('work-drawer-description').textContent = work.description;
+        document.getElementById('description-section').style.display = work.description ? "block" : "none";
 
         document.getElementById('links-section').style.display=(work.links.length>0) ? "block" : "none";
         const linksList = document.getElementById('work-drawer-links');

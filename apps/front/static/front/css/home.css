@@ -190,25 +190,35 @@
     cursor: pointer;
 }
 
-.work-drawer__meta {
+.work-drawer__field {
     margin: 0 0 1rem;
+    padding: 0.5rem 0.9rem 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
 }
 
-.work-drawer__meta dt {
+.work-drawer__field legend {
+    padding: 0 0.4rem;
+    margin-left: 0.4rem;
+    font-size: 0.8rem;
     font-weight: bold;
-    margin-top: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: #555;
 }
 
-.work-drawer__meta dd {
+.work-drawer__field p {
     margin: 0;
 }
 
 .work-drawer__links {
+    margin: 0;
     padding-left: 1.2rem;
 }
 
 .work-drawer__close-button {
-    margin-top: 1.5rem;
+    display: block;
+    margin: 1.5rem auto 0;
     padding: 0.6rem 1.2rem;
     border: none;
     border-radius: 8px;

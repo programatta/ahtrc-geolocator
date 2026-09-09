@@ -17,3 +17,5 @@ class AuthorConfig(AppConfig):
         forms_plugin = PLUGINS.get(PLUGIN_FORMS, {})
         for key in ('js', 'css'):
             forms_plugin[key] = [str(url) for url in forms_plugin.get(key, [])]
+
+        from . import signals  # noqa: F401

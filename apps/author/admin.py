@@ -1,17 +1,31 @@
+"""
+admin.py
+Vista de administración para:
+- Autores
+- Obras literarias.
+"""
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 from leaflet.admin import LeafletGeoAdmin
 from . import models
 
 
-# Register your models here.
+#------------------------------------------------------------------------------
+# Autores.
+#------------------------------------------------------------------------------
 @admin.register(models.Author)
 class AuthorAdmin(admin.ModelAdmin):
+    """
+    AuthorAdmin
+    Formulario para rellenar los datos del autor moderno.
+    """
     list_display = ['first_name', 'last_name']
     search_fields = ['first_name', 'last_name']
 
 
-
+#------------------------------------------------------------------------------
+# Obras lierarias.
+#------------------------------------------------------------------------------
 class ImageInline(admin.TabularInline):
     model = models.Imagen
     fields = ['image_tag', 'image']
@@ -28,7 +42,11 @@ class LinkInline(admin.TabularInline):
     verbose_name_plural = _('LinksInlines')
 
 @admin.register(models.LiteraryWork)
-class LiteraryAdmin(LeafletGeoAdmin):
+class LiteraryWorkAdmin(LeafletGeoAdmin):
+    """
+    LiteraryWorkAdmin
+    Formulario para rellenar los datos de la obra literária.
+    """
     list_display = ['title', 'author', 'genre']
     search_fields = ['title', 'author__first_name', 'author__last_name']
     list_filter=['genre']

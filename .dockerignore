@@ -5,6 +5,9 @@ docker
 docs
 environment/.env-local
 environment/.env
+environment/.env-prod-ahtrc
+environment/.env-prod-db
+environment/.env-prod-http
 .devcontainer
 .vscode
 .claude

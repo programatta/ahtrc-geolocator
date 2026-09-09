@@ -9,7 +9,7 @@ services:
     depends_on:
       - postgres_service
     env_file:
-      - ./environment/.env
+      - ./environment/.env-prod-ahtrc
     volumes:
       - static_data:/code/staticfiles
       - media_data:/code/media
@@ -20,7 +20,7 @@ services:
     ports:
       - "5432:5432"
     env_file:
-      - ./environment/.env
+      - ./environment/.env-prod-db
     volumes:
       - ./docker/db:/var/lib/postgresql
       - ./docker/logs/postgres:/var/log/postgresql
@@ -34,7 +34,7 @@ services:
     depends_on:
       - ahtrc_service
     env_file:
-      - ./environment/.env
+      - ./environment/.env-prod-http
     volumes:
       - static_data:/code/staticfiles:ro
       - media_data:/code/media:ro

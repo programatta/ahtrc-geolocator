@@ -6,10 +6,15 @@ RUN mkdir /code
 # añadimos las dependencias.
 # Sin libpq-dev: el proyecto usa psycopg2-binary, que trae su propio libpq
 # precompilado (no hace falta pg_config/cabeceras para compilar nada).
+# libgdal36/libgeos-c1t64 (no gdal-bin/geos-bin): Django/GeoDjango solo
+# necesita las librerías compartidas via ctypes, no las herramientas de línea
+# de comandos (ogr2ogr, gdalinfo...) que no se usan en el proyecto. gdal-bin
+# arrastra python3-gdal -> numpy -> build-essential/gcc/g++ (~450MB y un pico
+# de RAM en la instalación de más); con --no-install-recommends de propina.
 # Limpiamos el índice de apt en la misma capa para que no infle la imagen.
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 python3-venv python3-pip \
-    gdal-bin geos-bin \
+    libgdal36 libgeos-c1t64 \
     gettext \
     && rm -rf /var/lib/apt/lists/*
 

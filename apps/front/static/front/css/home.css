@@ -15,7 +15,7 @@
     align-items: center; /* Alinea verticalmente el título al centro (opcional) */
 
     /* Opcional: Para pintar el borde como en tu dibujo */
-    border: 1px solid #000;
+    border: 1px solid #c9b590;
     padding: 2px 15px 2px 15px;
     border-radius: 8px;
 }
@@ -25,12 +25,14 @@
     grid-column: 1;
     grid-row: 1 / span 2; /* Se extiende hacia abajo cubriendo las filas necesarias */
     margin: 0;
+    color: #936e31;
 }
 
 /* El resto de elementos se colocan en la columna 2 automáticamente */
 .contenedor-cabecera p {
     grid-column: 2;
     margin: 5px 0; /* Controla el espacio vertical entre ellos */
+    color: #0b203c;
 }
 
 .contenedor-cabecera .with-h1 {
@@ -39,6 +41,7 @@
     margin: 0;
     align-self: center;
     justify-self: center;
+    color: #936e31;
 }
 
 .subtitulo-cabecera {
@@ -62,7 +65,7 @@
     /* overflow-y: auto; Si el contenido crece, la tarjeta tendrá su propio scroll */
 
     /* Estética de la tarjeta (Efecto Glassmorphism sutil) */
-    background-color: rgba(255, 255, 255, 0.12);
+    background-color: rgba(201, 181, 144, 0.12);
     backdrop-filter: blur(3px);
     border-radius: 12px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
@@ -81,14 +84,15 @@
 }
 
 .total-container {
-    background-color: #999;
+    background-color: #936d31b8;
     padding: 12px;
     border-radius: 12px;
 }
 .total-item {
-    background-color: #e3e2e2;
+    background-color: #c9b590;
     padding: 6px;
     border-radius: 20px;
+    color: #0b203c;
 }
 
 .select-classic-authors {
@@ -101,8 +105,8 @@
     padding: 0.6rem 1.2rem;
     border: none;
     border-radius: 8px;
-    background: #333;
-    color: #fff;
+    background: #c9b590;
+    color: #0b203c;
     cursor: pointer;
 }
 
@@ -164,6 +168,9 @@
     padding: 1.5rem;
     overflow-y: auto;
     background: #fff;
+    background-image: url("../res/ahtrc-fondo-drawer.png");
+    background-repeat: repeat-y;
+    background-size: contain;
     box-shadow: 4px 0 12px rgb(0 0 0 / 0.2);
     border-radius: 8px 0 0 8px;
     /* -108%, no -100%: a -100% la box-shadow (sin recortar por .map-wrapper) sangraba por el borde del mapa aun cerrado */
@@ -184,16 +191,29 @@
     height: 2rem;
     border: none;
     border-radius: 50%;
-    background: #eee;
+    background: #c9b590;
+    color: #0b203c;
     font-size: 1.1rem;
     line-height: 1;
     cursor: pointer;
 }
 
+#work-drawer-author {
+    color:#936e31;
+}
+
+.work-drawer__separator {
+    margin: 0 0 1rem;
+    background-image: url("../res/ahtrc-separador.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 30px;
+}
+
 .work-drawer__field {
     margin: 0 0 1rem;
     padding: 0.5rem 0.9rem 0.75rem;
-    border: 1px solid #ccc;
+    border: 1px solid #c9b590;
     border-radius: 8px;
 }
 
@@ -204,16 +224,22 @@
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 0.02em;
-    color: #555;
+    color:#936e31;
 }
 
 .work-drawer__field p {
     margin: 0;
+    color: #0b203c;
 }
 
 .work-drawer__links {
     margin: 0;
     padding-left: 1.2rem;
+}
+
+.work-drawer__links a {
+    color: #0b203c;
+    text-decoration: none;
 }
 
 .work-drawer__close-button {
@@ -222,8 +248,8 @@
     padding: 0.6rem 1.2rem;
     border: none;
     border-radius: 8px;
-    background: #333;
-    color: #fff;
+    background: #c9b590;
+    color: #0b203c;
     cursor: pointer;
 }
 

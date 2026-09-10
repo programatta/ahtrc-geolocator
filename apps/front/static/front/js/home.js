@@ -14,7 +14,7 @@ function _corePage(literaryWorksData){
         minZoom:1,
         maxBounds: L.latLngBounds([-90, -180], [90, 180]),
         maxBoundsViscosity: 1.0,
-    })//.setView([40.41, -3.70], 4);
+    }).setView([40.4167, -3.7037], 6); // Vista inicial (España); si hay obras, renderMarkers() la ajusta con fitBounds.
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap',
         noWrap: true,

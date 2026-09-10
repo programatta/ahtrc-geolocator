@@ -51,18 +51,23 @@ class LiteraryWorkAdmin(LeafletGeoAdmin):
     search_fields = ['title', 'author__first_name', 'author__last_name']
     list_filter=['genre']
     autocomplete_fields = ['author', 'classic_author', 'genre']
-    display_raw_point = True # Muestra las coordenadas debajo del mapa por si acaso
+    display_raw = True # Muestra las coordenadas debajo del mapa por si acaso
     settings_overrides = {
         'DEFAULT_CENTER': (40.4167, -3.7037), 
         'DEFAULT_ZOOM': 6,
+        'MAX_ZOOM':14,
     }
     inlines = [ImageInline, LinkInline]
 
     class Media:
         js = (
-            'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
+            # Referenciamos el mismo asset que ya inyecta el widget (LeafletGeoAdmin,
+            # via include_media) en vez de duplicarlo desde unpkg: Django lo
+            # deduplica por URL y así garantizamos que window.L existe antes de
+            # cargar Control.Geocoder.js, sin depender del orden de fusión de Media.
+            'leaflet/leaflet.js',
             'https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js',
-            'admin/js/leaflet_setup.js', # Un pequeño script que crearemos ahora
+            'admin/js/leaflet_setup.js',
         )
         css = {
             'all': ('https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css',)

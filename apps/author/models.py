@@ -22,6 +22,12 @@ class Author(models.Model):
         verbose_name = _('Author')
         verbose_name_plural = _('Authors')
         ordering = ['last_name']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['first_name', 'last_name'],
+                name='unique_author_first_last_name'
+            )
+        ]
 
 
 class LiteraryWork(models.Model):

@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 class Genre(models.Model):
-    name = models.CharField(verbose_name=_('name'), max_length=256)
+    name = models.CharField(verbose_name=_('name'), max_length=256, unique=True)
 
     def __str__(self)->str:
         return f"{self.name}"

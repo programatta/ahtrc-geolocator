@@ -42,6 +42,26 @@ services:
       - "443:443"
     depends_on:
       - ahtrc_service
+    # certbot (más abajo) renueva el certificado en su propio contenedor y no
+    # puede avisar a este de forma directa sin acceso al socket de Docker
+    # (equivale a root sobre el host, superficie que no queremos exponer).
+    # En su lugar, recargamos nginx nosotros mismos cada 12h (mismo intervalo
+    # que usa el bucle de certbot) para recoger el certificado renovado.
+    # "nginx -s reload" es una recarga en caliente (relee certificados y
+    # config, sin cortar conexiones); el margen de hasta 12h antes de
+    # recogerlo es irrelevante para un certificado con ~90 días de validez.
+    # El ENTRYPOINT de la imagen oficial solo ejecuta los scripts de
+    # /docker-entrypoint.d/ (envsubst de ${DOMAIN} incluido) si "$1" es
+    # literalmente "nginx"/"nginx-debug" (verificado leyendo su código); al
+    # sobrescribir el CMD por defecto con este "/bin/sh" hay que lanzarlos
+    # nosotros mismos antes de arrancar nginx, o la plantilla se queda sin
+    # sustituir.
+    command: >
+      /bin/sh -c '
+        for f in /docker-entrypoint.d/*.sh; do [ -x "$$f" ] && "$$f"; done;
+        (while true; do sleep 12h; nginx -s reload; done) &
+        exec nginx -g "daemon off;"
+      '
     env_file:
       - ./environment/.env-prod-http
     volumes:

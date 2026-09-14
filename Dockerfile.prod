@@ -18,28 +18,41 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gettext \
     && rm -rf /var/lib/apt/lists/*
 
+# usuario dedicado para no ejecutar la app como root (principio de mínimo
+# privilegio: si Django/gunicorn/una dependencia tuviera una vulnerabilidad
+# de ejecución de código, el proceso comprometido no tendría privilegios de
+# root dentro del contenedor). setpriv (paquete util-linux) ya viene en la
+# imagen base, así que no hace falta instalar gosu/su-exec para el entrypoint.
+RUN useradd -r -m -d /home/ahtrc -s /usr/sbin/nologin ahtrc
+
 # copiamos requirements.txt.
 COPY requirements.txt /code
 COPY /requirements /code/requirements
 
 # creamos el entorno para evitar warnings.
+# chown al final: el venv se crea como root (COPY --chown de más abajo no lo
+# cubre, no viene del contexto de build) y "compilemessages" recorre también
+# las traducciones de las apps de Django instaladas ahí dentro (contrib.auth,
+# etc.), así que ahtrc necesita poder escribir esos .mo.
 RUN python3 -m venv /code/.venv \
     && . /code/.venv/bin/activate \
     # instalamos las dependencias (incluye stubs de tipos para el editor).
-    && pip3 install -r /code/requirements/production.txt
+    && pip3 install -r /code/requirements/production.txt \
+    && chown -R ahtrc:ahtrc /code/.venv
 
-# activamos el venv para cualquier proceso (CMD incluido, que se ejecuta con
-# "sh -c" y no lee /root/.bashrc, así que activarlo solo ahí no bastaría).
+# activamos el venv para cualquier proceso (entrypoint.prod.sh incluido, que
+# no lee /root/.bashrc, así que activarlo solo ahí no bastaría).
 ENV PATH="/code/.venv/bin:$PATH"
 
-# copiamos el resto del código de la aplicación (la imagen debe ser autocontenida).
-COPY . /code
+# copiamos el resto del código de la aplicación (la imagen debe ser
+# autocontenida), con --chown para que ahtrc pueda escribir en
+# staticfiles/media/locale (collectstatic/compilemessages/subida de imágenes).
+COPY --chown=ahtrc:ahtrc . /code
 
 # establecemos el directorio de trabajo.
 WORKDIR /code
 
-CMD python manage.py migrate --noinput \
-    && python manage.py create_super_user \
-    && python manage.py collectstatic --noinput \
-    && python manage.py compilemessages \
-    && gunicorn --bind :8000 conf.wsgi:application
+# el entrypoint arranca como root (necesario para el chown de los volúmenes
+# con nombre) y cede privilegios a ahtrc antes de ejecutar migrate/gunicorn;
+# ver entrypoint.prod.sh.
+ENTRYPOINT ["/code/entrypoint.prod.sh"]

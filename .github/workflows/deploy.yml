@@ -52,10 +52,16 @@ jobs:
         with:
           python-version: "3.13"
 
-      - name: Instalar dependencias del sistema (GDAL/GEOS, igual que Dockerfile.prod)
+      # Mismo criterio que Dockerfile.prod (solo librerías compartidas vía
+      # ctypes, sin gdal-bin/geos-bin ni el toolchain que arrastran), pero con
+      # los nombres de paquete de Ubuntu 24.04 (runner ubuntu-latest), que no
+      # coinciden con los de Debian trixie: libgdal34t64 (no libgdal36) y
+      # libgeos-c1t64 (igual que en Debian). Verificado con instalación real +
+      # ctypes.util.find_library('gdal'/'geos_c') y creación de un GEOSPoint.
+      - name: Instalar dependencias del sistema (GDAL/GEOS)
         run: |
           sudo apt-get update
-          sudo apt-get install -y gdal-bin geos-bin gettext
+          sudo apt-get install -y --no-install-recommends libgdal34t64 libgeos-c1t64 gettext
 
       - name: Instalar dependencias Python
         run: pip install -r requirements/base.txt

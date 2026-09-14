@@ -7,7 +7,8 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - postgres_service
+      postgres_service:
+        condition: service_healthy
     env_file:
       - ./environment/.env-prod-ahtrc
     volumes:
@@ -24,6 +25,14 @@ services:
     volumes:
       - ./docker/db:/var/lib/postgresql
       - ./docker/logs/postgres:/var/log/postgresql
+    # $$POSTGRES_USER/$$POSTGRES_DB (escapados) para que los resuelva el
+    # shell dentro del contenedor con las variables de .env-prod-db, no
+    # Compose al parsear este fichero.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      retries: 10
     restart: always
 
   http_service:

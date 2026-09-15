@@ -83,7 +83,19 @@ services:
       - certbot_etc:/etc/letsencrypt:ro
       - certbot_html:/var/www/certbot:ro
       - ./nginx/active.conf.template:/etc/nginx/templates/default.conf.template:ro
-      - ./docker/logs/http:/var/log/http
+    # Límite y rotación de los logs de nginx (access_log/error_log a
+    # /dev/stdout//dev/stderr, ver conf.template/conf.bootstrap.template):
+    # mismo criterio que ahtrc_service, sin esto Docker los dejaría crecer
+    # sin límite en el disco del droplet (10GB, ya al límite en el incidente
+    # del 2026-09-10). Sustituye al volumen "./docker/logs/http:/var/log/http"
+    # que había aquí antes: no interviene en ningún access_log/error_log real
+    # (la config de fábrica de nginx ya escribe en /var/log/nginx/*, no en
+    # /var/log/http), así que no aportaba nada.
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
     restart: always
 
   certbot:

@@ -66,9 +66,12 @@ class LiteraryWorkAdmin(LeafletGeoAdmin):
             # deduplica por URL y así garantizamos que window.L existe antes de
             # cargar Control.Geocoder.js, sin depender del orden de fusión de Media.
             'leaflet/leaflet.js',
-            'https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js',
+            # leaflet-control-geocoder 4.0.0 servido en local (admin/vendor/) en vez de
+            # unpkg.com sin versión fijada: evita depender de la disponibilidad del CDN
+            # y de que no cambie de contenido entre despliegues.
+            'admin/vendor/leaflet-control-geocoder/Control.Geocoder.js',
             'admin/js/leaflet_setup.js',
         )
         css = {
-            'all': ('https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css',)
+            'all': ('admin/vendor/leaflet-control-geocoder/Control.Geocoder.css',)
         }

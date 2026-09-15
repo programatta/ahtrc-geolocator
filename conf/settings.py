@@ -184,3 +184,32 @@ if not DEBUG:
 
     _domain = os.getenv('DOMAIN', '')
     CSRF_TRUSTED_ORIGINS = [f'https://{_domain}'] if _domain else []
+
+
+# --- Logging ---
+# Sin esto, en producción (DEBUG=False) Django no registra nada: el handler
+# de consola del logging por defecto solo se activa con DEBUG=True, y el
+# único handler activo en producción (mail_admins) no tiene a dónde enviar
+# nada porque no hay ADMINS ni un EMAIL_BACKEND real configurados. Salida a
+# stdout (no a fichero) para que la capture "docker logs ahtrcservice_container",
+# ya con rotación vía Docker (json-file) configurada en docker-compose.prod.yml.
+LOGGING = {
+    'version': 1,
+    # Necesario para no desactivar el logging por defecto de Django en
+    # desarrollo (runserver deja de imprimir las peticiones sin esto).
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {'format': '{asctime} {levelname} {name} {message}', 'style': '{'},
+    },
+    'handlers': {
+        'console': {'class': 'logging.StreamHandler', 'formatter': 'simple'},
+    },
+    'loggers': {
+        # 4xx (WARNING) y 5xx con traceback (ERROR): Django ya los emite por
+        # este logger de fábrica, solo hacía falta darle un handler activo.
+        'django.request': {'handlers': ['console'], 'level': 'WARNING', 'propagate': False},
+        # CSRF rechazado, Host no permitido, y los 403 del propio admin
+        # (accesos denegados): también los emite Django de fábrica.
+        'django.security': {'handlers': ['console'], 'level': 'WARNING', 'propagate': False},
+    },
+}

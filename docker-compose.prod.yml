@@ -4,8 +4,10 @@ services:
       context: .
       dockerfile: ./Dockerfile.prod
     container_name: ahtrcservice_container
-    ports:
-      - "8000:8000"
+    # Sin "ports": http_service llega a gunicorn por la red interna de
+    # Compose (proxy_pass http://ahtrc_service:8000, resuelto por nombre de
+    # servicio) sin necesidad de publicar el puerto al host; así se evita
+    # poder saltarse el proxy inverso accediendo directo por :8000.
     depends_on:
       postgres_service:
         condition: service_healthy
@@ -18,8 +20,10 @@ services:
 
   postgres_service:
     image: postgis/postgis:18-3.6-alpine
-    ports:
-      - "5432:5432"
+    # Sin "ports": ahtrc_service llega a Postgres por la red interna de
+    # Compose (DB_HOST resuelto por nombre de servicio); no hay acceso
+    # externo/manual a la base de datos, así que no hace falta publicar el
+    # puerto al host.
     env_file:
       - ./environment/.env-prod-db
     volumes:

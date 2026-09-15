@@ -2,11 +2,22 @@ server {
     listen 80;
     server_name ${DOMAIN};
 
+    # No revelar la versión de nginx en la cabecera "Server"/páginas de error.
+    server_tokens off;
+
     # Ruta necesaria para que Certbot valide la propiedad del dominio y
     # pueda emitir el primer certificado (todavía no existe ninguno).
     location /.well-known/acme-challenge/ {
         root /var/www/certbot;
     }
+
+    # Cabeceras de seguridad para /static/ y /media/, que nginx sirve
+    # directamente sin pasar por Django. Sin Strict-Transport-Security aquí:
+    # esta plantilla solo se usa en el arranque en HTTP puro (antes de tener
+    # certificado), y los navegadores ignoran esa cabecera fuera de HTTPS.
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-Frame-Options "DENY" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
 
     # Archivos Estáticos y Media de Django
     location /static/ {

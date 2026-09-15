@@ -2,6 +2,9 @@ server {
     listen 80;
     server_name ${DOMAIN};
 
+    # No revelar la versión de nginx en la cabecera "Server"/páginas de error.
+    server_tokens off;
+
     # Ruta necesaria para que Certbot valide la propiedad del dominio
     location /.well-known/acme-challenge/ {
         root /var/www/certbot;
@@ -17,6 +20,8 @@ server {
     listen 443 ssl;
     server_name ${DOMAIN};
 
+    server_tokens off;
+
     # Certificados SSL de Let's Encrypt
     ssl_certificate /etc/letsencrypt/live/${DOMAIN}/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/${DOMAIN}/privkey.pem;
@@ -24,6 +29,18 @@ server {
     # Optimización de seguridad SSL
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_prefer_server_ciphers on;
+
+    # Cabeceras de seguridad para /static/ y /media/, que nginx sirve
+    # directamente sin pasar por Django (que ya las pone en sus propias
+    # respuestas vía SecurityMiddleware/XFrameOptionsMiddleware). Mismo valor
+    # de Referrer-Policy que conf/settings.py (SECURE_REFERRER_POLICY) y de
+    # HSTS que SECURE_HSTS_SECONDS/SECURE_HSTS_INCLUDE_SUBDOMAINS (por
+    # defecto en .env-prod-ahtrc) — si cambian esos valores, actualizar aquí
+    # también.
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-Frame-Options "DENY" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header Strict-Transport-Security "max-age=86400; includeSubDomains" always;
 
     # Archivos Estáticos y Media de Django
     location /static/ {

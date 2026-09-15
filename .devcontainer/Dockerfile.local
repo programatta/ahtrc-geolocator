@@ -1,4 +1,4 @@
-FROM debian:trixie-slim
+FROM debian:13.6-slim
 
 # recibimos el usuairo del sistema.
 ARG user

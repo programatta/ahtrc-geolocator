@@ -5,6 +5,14 @@ server {
     # No revelar la versión de nginx en la cabecera "Server"/páginas de error.
     server_tokens off;
 
+    # Explícito en vez de confiar en el comportamiento por defecto de la
+    # imagen oficial (que ya symlinka /var/log/nginx/access.log//error.log a
+    # /dev/stdout//dev/stderr): documenta la intención y no depende de que
+    # ese detalle de la imagen no cambie en el futuro. Rotación vía Docker
+    # (logging: json-file en docker-compose.prod.yml), no logrotate.
+    access_log /dev/stdout;
+    error_log /dev/stderr;
+
     # Ruta necesaria para que Certbot valide la propiedad del dominio
     location /.well-known/acme-challenge/ {
         root /var/www/certbot;
@@ -21,6 +29,14 @@ server {
     server_name ${DOMAIN};
 
     server_tokens off;
+
+    # Explícito en vez de confiar en el comportamiento por defecto de la
+    # imagen oficial (que ya symlinka /var/log/nginx/access.log//error.log a
+    # /dev/stdout//dev/stderr): documenta la intención y no depende de que
+    # ese detalle de la imagen no cambie en el futuro. Rotación vía Docker
+    # (logging: json-file en docker-compose.prod.yml), no logrotate.
+    access_log /dev/stdout;
+    error_log /dev/stderr;
 
     # Certificados SSL de Let's Encrypt
     ssl_certificate /etc/letsencrypt/live/${DOMAIN}/fullchain.pem;

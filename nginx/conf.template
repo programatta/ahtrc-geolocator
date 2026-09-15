@@ -42,6 +42,22 @@ server {
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
     add_header Strict-Transport-Security "max-age=86400; includeSubDomains" always;
 
+    # Content-Security-Policy en modo Report-Only (todavía no bloquea nada,
+    # solo reporta violaciones en la consola del navegador): paso previo
+    # antes de pasar a la cabecera "Content-Security-Policy" que sí bloquea,
+    # una vez verificado en real que no falta ningún origen (mapa público y
+    # admin, incluida la búsqueda del geocoder). 'unsafe-inline' en
+    # script-src/style-src: necesario mientras home.html siga interpolando
+    # los datos del mapa en un <script> inline en vez de usar json_script.
+    # data: en img-src: lo usa el icono SVG embebido del buscador del
+    # geocoder del admin (Control.Geocoder.css). *.tile.openstreetmap.org y
+    # tile.openstreetmap.org (sin subdominio): el front usa tiles con
+    # subdominios {s}=a/b/c, el widget de mapa del admin (django-leaflet) usa
+    # el dominio sin subdominio — un wildcard no cubre el otro. Ver
+    # docs/DEUDA.md (2026-09-15, Infraestructura/producción) para el diseño
+    # completo.
+    add_header Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.tile.openstreetmap.org https://tile.openstreetmap.org; connect-src 'self' https://nominatim.openstreetmap.org; frame-ancestors 'none'; base-uri 'self'; form-action 'self';" always;
+
     # Archivos Estáticos y Media de Django
     location /static/ {
         alias /code/staticfiles/;

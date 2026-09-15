@@ -19,6 +19,11 @@ server {
     add_header X-Frame-Options "DENY" always;
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
 
+    # Content-Security-Policy en modo Report-Only: ver el comentario
+    # equivalente en conf.template y docs/DEUDA.md (2026-09-15,
+    # Infraestructura/producción) para el detalle de cada origen permitido.
+    add_header Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.tile.openstreetmap.org https://tile.openstreetmap.org; connect-src 'self' https://nominatim.openstreetmap.org; frame-ancestors 'none'; base-uri 'self'; form-action 'self';" always;
+
     # Archivos Estáticos y Media de Django
     location /static/ {
         alias /code/staticfiles/;

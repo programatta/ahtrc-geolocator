@@ -19,5 +19,10 @@ exec setpriv --reuid=ahtrc --regid=ahtrc --init-groups --inh-caps=-all \
         python manage.py create_super_user
         python manage.py collectstatic --noinput
         python manage.py compilemessages
-        exec gunicorn --bind :8000 conf.wsgi:application
+        # --access-logfile/--error-logfile explícitos ("-" = stdout/stderr,
+        # capturados por Docker igual que el resto de la salida de gunicorn,
+        # sin crear un fichero nuevo que gestionar en el disco del droplet):
+        # por defecto gunicorn no registra el log de acceso en absoluto,
+        # solo mensajes de error/crítico de sus propios workers.
+        exec gunicorn --bind :8000 --access-logfile - --error-logfile - conf.wsgi:application
     '

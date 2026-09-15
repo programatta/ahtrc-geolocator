@@ -16,6 +16,15 @@ services:
     volumes:
       - static_data:/code/staticfiles
       - media_data:/code/media
+    # Límite y rotación de los logs de gunicorn (access-logfile/error-logfile
+    # a stdout/stderr desde entrypoint.prod.sh): sin esto, Docker los dejaría
+    # crecer sin límite en el disco del droplet (10GB, ya al límite en el
+    # incidente del 2026-09-10).
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
     restart: always
 
   postgres_service:

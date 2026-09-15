@@ -1,4 +1,4 @@
-FROM debian:trixie-slim
+FROM debian:13.6-slim
 
 # creamos el directorio de trabajo en el contenedor, que estará mapeado con el host.
 RUN mkdir /code

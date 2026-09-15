@@ -74,7 +74,7 @@ services:
     restart: always
 
   certbot:
-    image: certbot/certbot
+    image: certbot/certbot:v5.8.0
     volumes:
       - certbot_etc:/etc/letsencrypt
       - certbot_var:/var/lib/letsencrypt

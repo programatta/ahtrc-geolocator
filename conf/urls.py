@@ -19,11 +19,14 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+from apps.base.views import RequestLoginCodeView
+
 admin.site.site_header = settings.DJANGO_SITE_HEADER_NAME
 admin.site.index_title = settings.DJANGO_SITE_INDEX_TITLE
 admin.site.site_title = settings.DJANGO_SITE_TITLE
 
 urlpatterns = [
+    path('admin-login-code/', RequestLoginCodeView.as_view(), name='request_login_code'),
     path('admin/', admin.site.urls),
     path('', include('apps.front.urls'))
 ]

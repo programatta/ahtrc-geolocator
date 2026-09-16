@@ -5,5 +5,5 @@ from . import models
 @admin.register(models.ClassicAuthor)
 class ClassicAuthorAdmin(admin.ModelAdmin):
     list_display = ['name']
-    search_fields = ['name']
+    search_fields = ['name__unaccent']
     filter_horizontal = ['genres']

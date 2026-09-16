@@ -5,6 +5,7 @@ Vista de administración para:
 - Obras literarias.
 """
 from django.contrib import admin
+from django.contrib.postgres.search import TrigramSimilarity
 from django.utils.translation import gettext_lazy as _
 from leaflet.admin import LeafletGeoAdmin
 from . import models
@@ -20,7 +21,25 @@ class AuthorAdmin(admin.ModelAdmin):
     Formulario para rellenar los datos del autor moderno.
     """
     list_display = ['first_name', 'last_name']
-    search_fields = ['first_name', 'last_name']
+    # unaccent cubre la búsqueda sin tildes (p. ej. "cortazar" -> "Cortázar");
+    # como refuerzo, get_search_results() añade también una búsqueda por
+    # similitud (pg_trgm) para lo que unaccent no resuelve por sí solo —
+    # apellidos con puntuación irregular ("O’Neil", comillas incrustadas) o
+    # errores tipográficos reales.
+    search_fields = ['first_name__unaccent', 'last_name__unaccent']
+
+    def get_search_results(self, request, queryset, search_term):
+        exact_qs, may_have_duplicates = super().get_search_results(request, queryset, search_term)
+        if search_term:
+            trigram_qs = queryset.annotate(
+                similarity=(
+                    TrigramSimilarity('first_name', search_term)
+                    + TrigramSimilarity('last_name', search_term)
+                )
+            ).filter(similarity__gt=0.3)
+            exact_qs |= trigram_qs
+            may_have_duplicates = True
+        return exact_qs, may_have_duplicates
 
 
 #------------------------------------------------------------------------------
@@ -48,7 +67,7 @@ class LiteraryWorkAdmin(LeafletGeoAdmin):
     Formulario para rellenar los datos de la obra literária.
     """
     list_display = ['title', 'author', 'genre']
-    search_fields = ['title', 'author__first_name', 'author__last_name']
+    search_fields = ['title__unaccent', 'author__first_name__unaccent', 'author__last_name__unaccent']
     list_filter=['genre']
     autocomplete_fields = ['author', 'classic_author', 'genre']
     display_raw = True # Muestra las coordenadas debajo del mapa por si acaso

@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     #extension-gis.
     'django.contrib.gis',
+    #extension-busqueda-sin-acentos/aproximada (unaccent/pg_trgm) en el admin.
+    'django.contrib.postgres',
     #extension-mapa.
     'leaflet',
     #apps

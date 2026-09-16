@@ -35,6 +35,7 @@ SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
 
 DJANGO_SITE_HEADER_NAME = os.getenv('SITE_HEADER_NAME')
 DJANGO_SITE_INDEX_TITLE = os.getenv('SITE_INDEX_TITLE')
+DJANGO_SITE_TITLE = os.getenv('SITE_TITLE')
 
 # Application definition
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-16 09:37+0000\n"
+"POT-Creation-Date: 2026-09-16 12:06+0000\n"
 "PO-Revision-Date: 2026-09-01 13:24+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Spanish\n"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: apps/base/forms.py:35
 msgid "Username"
-msgstr "Usuario"
+msgstr "Nombre de usuario"
 
 #: apps/base/models.py:28
 msgid "Your access code"
@@ -175,7 +175,11 @@ msgstr "Código de acceso"
 msgid "Login codes"
 msgstr "Códigos de acceso"
 
-#: apps/base/views.py:30
+#: apps/base/views.py:26
+msgid "Request code"
+msgstr "Solicitar código"
+
+#: apps/base/views.py:41
 msgid "If the user exists, an access code has been sent to their email."
 msgstr "Si el usuario existe, se ha enviado un código de acceso a su email."
 
@@ -243,10 +247,10 @@ msgstr "Iniciar sesión"
 msgid "Don't have a code? Request one"
 msgstr "¿No tienes código? Solicita uno"
 
-#: templates/base/request_login_code.html:19
+#: templates/base/request_login_code.html:22
 msgid "Send code"
 msgstr "Enviar código"
 
-#: templates/base/request_login_code.html:22
+#: templates/base/request_login_code.html:26
 msgid "Back to login"
 msgstr "Volver al login"

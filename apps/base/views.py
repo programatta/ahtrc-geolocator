@@ -1,4 +1,4 @@
-from django.contrib import messages
+from django.contrib import admin, messages
 from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy
 from django.utils.translation import gettext
@@ -14,6 +14,17 @@ class RequestLoginCodeView(FormView):
     template_name = 'base/request_login_code.html'
     form_class = RequestLoginCodeForm
     success_url = reverse_lazy('admin:login')
+
+    def get_context_data(self, **kwargs):
+        # Al no ser una vista del admin, no pasa por AdminSite.each_context()
+        # de forma automática: sin esto, site_header/site_title/index_title
+        # (conf/urls.py) caen a los valores por defecto de Django en esta
+        # plantilla, en vez de los del proyecto. "title" tampoco lo pone
+        # nadie por defecto (admin.site.login() sí lo hace para su propia
+        # vista) — lo usa el <title> del tab del navegador.
+        context = {**admin.site.each_context(self.request), **super().get_context_data(**kwargs)}
+        context['title'] = gettext('Request code')
+        return context
 
     def form_valid(self, form):
         username = form.cleaned_data['username']

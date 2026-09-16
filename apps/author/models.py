@@ -1,8 +1,9 @@
+from django.core.validators import FileExtensionValidator, URLValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.utils.html import format_html
 from django.contrib.gis.db import models as gis_models
-from .utils import path_and_rename
+from .utils import path_and_rename, validate_image_max_size
 
 # Create your models here.
 class Author(models.Model):
@@ -83,7 +84,11 @@ class Imagen(models.Model):
         upload_to=path_and_rename,
         blank=True,
         null=True,
-        verbose_name=_('Image')
+        verbose_name=_('Image'),
+        validators=[
+            FileExtensionValidator(allowed_extensions=['png', 'jpg', 'jpeg']),
+            validate_image_max_size,
+        ]
     )
 
     class Meta:
@@ -106,7 +111,8 @@ class Link(models.Model):
     )
     link = models.CharField(
         verbose_name=_('link'),
-        max_length=4096
+        max_length=4096,
+        validators=[URLValidator(schemes=['http', 'https'])]
     )
 
     class Meta:

@@ -21,6 +21,7 @@ from django.urls import path, include
 
 admin.site.site_header = settings.DJANGO_SITE_HEADER_NAME
 admin.site.index_title = settings.DJANGO_SITE_INDEX_TITLE
+admin.site.site_title = settings.DJANGO_SITE_TITLE
 
 urlpatterns = [
     path('admin/', admin.site.urls),

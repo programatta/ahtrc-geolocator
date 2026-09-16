@@ -127,6 +127,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Sustituye por completo el backend de usuario/contraseña de Django: el
+# login del admin ya no comprueba la contraseña (ver
+# apps.base.forms.OTPAdminAuthenticationForm), solo el código de un solo uso
+# de apps.base.models.LoginCode (docs/DEUDA.md, 2026-09-15, OWASP A07).
+AUTHENTICATION_BACKENDS = ['apps.base.auth_backends.OTPBackend']
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.1/topics/i18n/
@@ -153,12 +159,21 @@ MEDIA_ROOT = os.getenv('MEDIA_ROOT', os.path.join(BASE_DIR, 'media'))
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
+# "MAILERS" (config anterior) no es un setting que Django reconozca, nunca
+# llegó a usarse (ver docs/DEUDA.md, 2026-09-15). En desarrollo (DEBUG=True)
+# los códigos de acceso se imprimen por consola en vez de enviarse de
+# verdad, para no depender de credenciales SMTP reales en el devcontainer.
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = 'smtp-relay.brevo.com'
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+    EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
-MAILERS = {
-    'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
-    },
-}
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'webmaster@localhost')
 
 # --- Seguridad HTTPS ---
 # nginx hace de proxy TLS delante de gunicorn en producción. Estos ajustes

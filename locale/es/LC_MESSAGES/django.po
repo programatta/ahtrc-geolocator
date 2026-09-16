@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-01 13:46+0000\n"
+"POT-Creation-Date: 2026-09-16 09:37+0000\n"
 "PO-Revision-Date: 2026-09-01 13:24+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Spanish\n"
@@ -18,19 +18,19 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
 "1 : 2;\n"
 
-#: apps/author/admin.py:19
+#: apps/author/admin.py:34
 msgid "ImageInline"
 msgstr "Imagen"
 
-#: apps/author/admin.py:20
+#: apps/author/admin.py:35
 msgid "ImagesInline"
 msgstr "Imágenes"
 
-#: apps/author/admin.py:26
+#: apps/author/admin.py:41
 msgid "LinkInline"
 msgstr "Enlace"
 
-#: apps/author/admin.py:27
+#: apps/author/admin.py:42
 msgid "LinksInlines"
 msgstr "Enlaces"
 
@@ -38,77 +38,146 @@ msgstr "Enlaces"
 msgid "Literary works"
 msgstr "Obras literarias"
 
-#: apps/author/models.py:8
+#: apps/author/models.py:10
 msgid "first_name"
 msgstr "nombre"
 
-#: apps/author/models.py:12
+#: apps/author/models.py:14
 msgid "last_name"
 msgstr "apellidos"
 
-#: apps/author/models.py:20
+#: apps/author/models.py:22
 msgid "Author"
 msgstr "Autor"
 
-#: apps/author/models.py:21
+#: apps/author/models.py:23
 msgid "Authors"
 msgstr "Autores"
 
-#: apps/author/models.py:27
+#: apps/author/models.py:35
 msgid "title"
 msgstr "título"
 
-#: apps/author/models.py:31
+#: apps/author/models.py:39
 msgid "author"
 msgstr "autor"
 
-#: apps/author/models.py:37
+#: apps/author/models.py:45
 msgid "classic_author"
 msgstr "autor clásico"
 
-#: apps/author/models.py:43
+#: apps/author/models.py:51
 msgid "genre"
 msgstr "género"
 
-#: apps/author/models.py:48
+#: apps/author/models.py:56
 msgid "description"
 msgstr "descripción"
 
-#: apps/author/models.py:53
+#: apps/author/models.py:61
 msgid "location"
 msgstr "ubicación"
 
-#: apps/author/models.py:62
+#: apps/author/models.py:70
 msgid "LiteraryWork"
 msgstr "Obra literaria"
 
-#: apps/author/models.py:63
+#: apps/author/models.py:71
 msgid "LiteraryWorks"
 msgstr "Obras literarias"
 
-#: apps/author/models.py:70 apps/author/models.py:88
+#: apps/author/models.py:78 apps/author/models.py:103
 msgid "literary_work"
 msgstr "obra literaria"
 
-#: apps/author/models.py:75 apps/author/models.py:93
-msgid "link"
-msgstr "enlace"
+#: apps/author/models.py:86 apps/author/models.py:97
+#, fuzzy
+#| msgid "Imagen"
+msgid "Image"
+msgstr "Imagen"
 
-#: apps/author/models.py:80
+#: apps/author/models.py:90
 msgid "Imagen"
 msgstr "Imagen"
 
-#: apps/author/models.py:81
+#: apps/author/models.py:91
 msgid "Imagens"
 msgstr "Imágenes"
 
-#: apps/author/models.py:98
+#: apps/author/models.py:108
+msgid "link"
+msgstr "enlace"
+
+#: apps/author/models.py:113
 msgid "Link"
 msgstr "Enlace"
 
-#: apps/author/models.py:99
+#: apps/author/models.py:114
 msgid "Links"
 msgstr "Enlaces"
+
+#: apps/base/forms.py:11
+msgid "Access code"
+msgstr "Código de acceso"
+
+#: apps/base/forms.py:27
+#, python-format
+msgid ""
+"Please enter the correct %(username)s and access code for a staff account. "
+"The code may have expired or already been used — request a new one."
+msgstr ""
+"Introduzca el %(username)s y el código de acceso correctos para una cuenta "
+"de staff. El código puede haber caducado o ya haber sido usado — solicite "
+"uno nuevo."
+
+#: apps/base/forms.py:35
+msgid "Username"
+msgstr "Usuario"
+
+#: apps/base/models.py:28
+msgid "Your access code"
+msgstr "Tu código de acceso"
+
+#: apps/base/models.py:30
+#, python-format
+msgid "Your access code is %(code)s. It expires in %(minutes)d minutes."
+msgstr "Tu código de acceso es %(code)s. Caduca en %(minutes)d minutos."
+
+#: apps/base/models.py:44
+msgid "user"
+msgstr "usuario"
+
+#: apps/base/models.py:48
+msgid "code hash"
+msgstr "hash del código"
+
+#: apps/base/models.py:49
+msgid "created at"
+msgstr "creado el"
+
+#: apps/base/models.py:50
+msgid "expires at"
+msgstr "caduca el"
+
+#: apps/base/models.py:51
+msgid "used at"
+msgstr "usado el"
+
+#: apps/base/models.py:52
+msgid "attempts"
+msgstr "intentos"
+
+#: apps/base/models.py:67
+msgid "Login code"
+msgstr "Código de acceso"
+
+#: apps/base/models.py:68
+msgid "Login codes"
+msgstr "Códigos de acceso"
+
+#: apps/base/views.py:30
+msgid "If the user exists, an access code has been sent to their email."
+msgstr "Si el usuario existe, se ha enviado un código de acceso a su email."
 
 #: apps/classicauthor/apps.py:7
 msgid "Classic authors"
@@ -137,3 +206,47 @@ msgstr "Géneros"
 #: apps/genre/models.py:12
 msgid "Genre"
 msgstr "Género"
+
+#: templates/admin/base_site.html:4
+msgid "Django site admin"
+msgstr "Sitio de administración de Django"
+
+#: templates/admin/base_site.html:7
+msgid "Django administration"
+msgstr "Administración de Django"
+
+#: templates/admin/login.html:4
+msgid "Error:"
+msgstr "Error:"
+
+#: templates/admin/login.html:24
+msgid "Please correct the error below."
+msgid_plural "Please correct the errors below."
+msgstr[0] "Por favor, corrija el siguiente error."
+msgstr[1] "Por favor, corrija los siguientes errores."
+msgstr[2] "Por favor, corrija los siguientes errores."
+
+#: templates/admin/login.html:40
+#, python-format
+msgid ""
+"You are authenticated as %(username)s, but are not authorized to access this "
+"page. Would you like to login to a different account?"
+msgstr ""
+"Se ha autenticado como %(username)s, pero no está autorizado a acceder a "
+"esta página. ¿Desea autenticarse con una cuenta diferente?"
+
+#: templates/admin/login.html:58
+msgid "Log in"
+msgstr "Iniciar sesión"
+
+#: templates/admin/login.html:63
+msgid "Don't have a code? Request one"
+msgstr "¿No tienes código? Solicita uno"
+
+#: templates/base/request_login_code.html:19
+msgid "Send code"
+msgstr "Enviar código"
+
+#: templates/base/request_login_code.html:22
+msgid "Back to login"
+msgstr "Volver al login"

@@ -1,5 +1,8 @@
 {% extends "admin/base_site.html" %}
-{% load i18n %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static "admin/css/login.css" %}">
+{% endblock %}
 
 {% block bodyclass %}{{ block.super }} login{% endblock %}
 {% block usertools %}{% endblock %}
@@ -19,6 +22,8 @@
       <input type="submit" value="{% translate 'Send code' %}">
     </div>
   </form>
-  <p><a href="{% url 'admin:login' %}">{% translate 'Back to login' %}</a></p>
+  <div class="back-to-login-link" style="text-align: center; margin-top: 15px;">
+    <a href="{% url 'admin:login' %}">{% translate 'Back to login' %}</a>
+  </div>
 </div>
 {% endblock %}

@@ -9,3 +9,5 @@ class BaseConfig(AppConfig):
 
         from apps.base.forms import OTPAdminAuthenticationForm
         admin.site.login_form = OTPAdminAuthenticationForm
+
+        from . import signals  # noqa: F401

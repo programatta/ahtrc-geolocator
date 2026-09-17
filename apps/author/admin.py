@@ -66,9 +66,9 @@ class LiteraryWorkAdmin(LeafletGeoAdmin):
     LiteraryWorkAdmin
     Formulario para rellenar los datos de la obra literária.
     """
-    list_display = ['title', 'author', 'genre']
+    list_display = ['title', 'author', 'genre', 'lwith_location']
     search_fields = ['title__unaccent', 'author__first_name__unaccent', 'author__last_name__unaccent']
-    list_filter=['genre']
+    list_filter = ['genre', ('location', admin.EmptyFieldListFilter)]
     autocomplete_fields = ['author', 'classic_author', 'genre']
     display_raw = True # Muestra las coordenadas debajo del mapa por si acaso
     settings_overrides = {
@@ -77,6 +77,11 @@ class LiteraryWorkAdmin(LeafletGeoAdmin):
         'MAX_ZOOM':14,
     }
     inlines = [ImageInline, LinkInline]
+
+    def lwith_location(self, obj):
+        return obj.location is not None
+    lwith_location.short_description = _('with_location')
+    lwith_location.boolean = True
 
     class Media:
         js = (

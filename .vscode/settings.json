@@ -1,5 +1,10 @@
 {
     "python.analysis.languageServerMode": "light",
     "pylint.importStrategy": "fromEnvironment",
+    "pylint.args": [
+        "--load-plugins=pylint_django",
+        "--django-settings-module=conf.settings",
+        "--init-hook=import sys; sys.path.insert(0, '/code')"
+    ],
     "html.validate.scripts": false
 }

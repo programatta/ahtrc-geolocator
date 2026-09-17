@@ -43,7 +43,7 @@ class Command(BaseCommand):
         try:
             classic_author = ClassicAuthor.objects.get(name=classic_author_str.capitalize())
         except ClassicAuthor.DoesNotExist:
-            classic_author = ClassicAuthor.objects.get(name='SIN ASIGNAR')
+            classic_author = ClassicAuthor.objects.get(is_unassigned=True)
 
         #Autor.
         author_str_items = author_str.split(' ')
@@ -58,7 +58,7 @@ class Command(BaseCommand):
             author = Author.objects.create(first_name=first_name, last_name=last_name)
 
         #Genero.
-        genre = Genre.objects.get(name='SIN ASIGNAR')
+        genre = Genre.objects.get(is_unassigned=True)
 
         #Datos de la obra.
         pnt = GEOSGeometry(f"POINT({lon_str} {lat_str})")

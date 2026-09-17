@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-17 10:28+0000\n"
+"POT-Creation-Date: 2026-09-17 11:34+0000\n"
 "PO-Revision-Date: 2026-09-01 13:24+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Spanish\n"
@@ -204,19 +204,23 @@ msgstr "nombre"
 msgid "genres"
 msgstr "Géneros"
 
-#: apps/classicauthor/models.py:14
+#: apps/classicauthor/models.py:9 apps/genre/models.py:7
+msgid "is_unassigned"
+msgstr "es el registro «Sin asignar»"
+
+#: apps/classicauthor/models.py:15
 msgid "ClassicAuthor"
 msgstr "Autor clásico"
 
-#: apps/classicauthor/models.py:15
+#: apps/classicauthor/models.py:16
 msgid "ClassicAuthors"
 msgstr "Autores clásicos"
 
-#: apps/genre/apps.py:7 apps/genre/models.py:13
+#: apps/genre/apps.py:7 apps/genre/models.py:14
 msgid "Genres"
 msgstr "Géneros"
 
-#: apps/genre/models.py:12
+#: apps/genre/models.py:13
 msgid "Genre"
 msgstr "Género"
 

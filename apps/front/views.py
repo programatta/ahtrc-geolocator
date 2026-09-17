@@ -16,7 +16,7 @@ class HomePageView(TemplateView):
         return context
 
     def _load_classic_data(self):
-        return ClassicAuthor.objects.exclude(name='SIN ASIGNAR')
+        return ClassicAuthor.objects.exclude(is_unassigned=True)
 
     def _load_literary_works_data(self):
         return LiteraryWork.objects.select_related(
@@ -27,5 +27,5 @@ class HomePageView(TemplateView):
         totals = {}
         totals['authorCount'] = Author.objects.count()
         totals['literaryworkCount'] = LiteraryWork.objects.filter(location__isnull=False).count()
-        totals['classicauthorCount'] = ClassicAuthor.objects.exclude(name='SIN ASIGNAR').count()
+        totals['classicauthorCount'] = ClassicAuthor.objects.exclude(is_unassigned=True).count()
         return totals

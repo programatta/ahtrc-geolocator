@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AHTRC - Geolocalizador</title>
+    <link rel="stylesheet" href="{% static 'front/css/landing.css' %}" />
+
+    <!-- Código de Favicon.io adaptado para Django -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'front/res/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'front/res/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'front/res/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'front/res/site.webmanifest' %}">
+    <!-- Opcional pero recomendado para navegadores antiguos: -->
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'front/res/favicon.ico' %}">
+  </head>
+  <body>
+    <img class="landing-image" src="{% static 'front/res/ahtrc-landing.png' %}" alt="AHTRC Geolocalizador">
+    <div class="landing-content-text">
+      <h1 class="landing-main-text">Preparando el mapa</h1>
+      <p class="landing-secondary-text">Disculpen las molestias</p>
+    </div>
+  </body>
+</html>

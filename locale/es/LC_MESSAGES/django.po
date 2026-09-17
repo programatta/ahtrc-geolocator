@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-16 12:06+0000\n"
+"POT-Creation-Date: 2026-09-17 10:28+0000\n"
 "PO-Revision-Date: 2026-09-01 13:24+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Spanish\n"
@@ -18,103 +18,112 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
 "1 : 2;\n"
 
-#: apps/author/admin.py:34
+#: apps/author/admin.py:53
 msgid "ImageInline"
 msgstr "Imagen"
 
-#: apps/author/admin.py:35
+#: apps/author/admin.py:54
 msgid "ImagesInline"
 msgstr "Imágenes"
 
-#: apps/author/admin.py:41
+#: apps/author/admin.py:60
 msgid "LinkInline"
 msgstr "Enlace"
 
-#: apps/author/admin.py:42
+#: apps/author/admin.py:61
 msgid "LinksInlines"
 msgstr "Enlaces"
+
+#: apps/author/admin.py:83
+msgid "with_location"
+msgstr "con localización"
 
 #: apps/author/apps.py:7
 msgid "Literary works"
 msgstr "Obras literarias"
 
-#: apps/author/models.py:10
+#: apps/author/models.py:11
 msgid "first_name"
 msgstr "nombre"
 
-#: apps/author/models.py:14
+#: apps/author/models.py:15
 msgid "last_name"
 msgstr "apellidos"
 
-#: apps/author/models.py:22
+#: apps/author/models.py:23
 msgid "Author"
 msgstr "Autor"
 
-#: apps/author/models.py:23
+#: apps/author/models.py:24
 msgid "Authors"
 msgstr "Autores"
 
-#: apps/author/models.py:35
+#: apps/author/models.py:36
 msgid "title"
 msgstr "título"
 
-#: apps/author/models.py:39
+#: apps/author/models.py:40
 msgid "author"
 msgstr "autor"
 
-#: apps/author/models.py:45
+#: apps/author/models.py:46
 msgid "classic_author"
 msgstr "autor clásico"
 
-#: apps/author/models.py:51
+#: apps/author/models.py:52
 msgid "genre"
 msgstr "género"
 
-#: apps/author/models.py:56
+#: apps/author/models.py:57
 msgid "description"
 msgstr "descripción"
 
-#: apps/author/models.py:61
+#: apps/author/models.py:62
 msgid "location"
 msgstr "ubicación"
 
-#: apps/author/models.py:70
+#: apps/author/models.py:71
 msgid "LiteraryWork"
 msgstr "Obra literaria"
 
-#: apps/author/models.py:71
+#: apps/author/models.py:72
 msgid "LiteraryWorks"
 msgstr "Obras literarias"
 
-#: apps/author/models.py:78 apps/author/models.py:103
+#: apps/author/models.py:79 apps/author/models.py:108
 msgid "literary_work"
 msgstr "obra literaria"
 
-#: apps/author/models.py:86 apps/author/models.py:97
+#: apps/author/models.py:87 apps/author/models.py:102
 #, fuzzy
 #| msgid "Imagen"
 msgid "Image"
 msgstr "Imagen"
 
-#: apps/author/models.py:90
+#: apps/author/models.py:95
 msgid "Imagen"
 msgstr "Imagen"
 
-#: apps/author/models.py:91
+#: apps/author/models.py:96
 msgid "Imagens"
 msgstr "Imágenes"
 
-#: apps/author/models.py:108
+#: apps/author/models.py:113
 msgid "link"
 msgstr "enlace"
 
-#: apps/author/models.py:113
+#: apps/author/models.py:119
 msgid "Link"
 msgstr "Enlace"
 
-#: apps/author/models.py:114
+#: apps/author/models.py:120
 msgid "Links"
 msgstr "Enlaces"
+
+#: apps/author/utils.py:27
+#, python-format
+msgid "File too large. Size should not exceed %(max_size)s."
+msgstr "Archivo demasiado grande. El tamaño no debe exceder de %(max_size)s."
 
 #: apps/base/forms.py:11
 msgid "Access code"
@@ -254,3 +263,12 @@ msgstr "Enviar código"
 #: templates/base/request_login_code.html:26
 msgid "Back to login"
 msgstr "Volver al login"
+
+#~ msgid "literarywork_with_location"
+#~ msgstr "con localización"
+
+#~ msgid "Yes"
+#~ msgstr "Sí"
+
+#~ msgid "No"
+#~ msgstr "No"

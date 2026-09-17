@@ -26,6 +26,6 @@ class HomePageView(TemplateView):
     def _load_totals_data(self):
         totals = {}
         totals['authorCount'] = Author.objects.count()
-        totals['literaryworkCount'] = LiteraryWork.objects.count()
+        totals['literaryworkCount'] = LiteraryWork.objects.filter(location__isnull=False).count()
         totals['classicauthorCount'] = ClassicAuthor.objects.exclude(name='SIN ASIGNAR').count()
         return totals

@@ -6,6 +6,7 @@ from apps.genre import models as genremodels
 class ClassicAuthor(models.Model):
     name = models.CharField(verbose_name=_('name'), max_length=256, unique=True)
     genres = models.ManyToManyField(genremodels.Genre, verbose_name=_('genres'))
+    is_unassigned = models.BooleanField(verbose_name=_('is_unassigned'), default=False)
 
     def __str__(self)->str:
         return f"{self.name}"
